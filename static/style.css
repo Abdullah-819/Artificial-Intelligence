@@ -39,6 +39,7 @@ body, html {
 .splash-layer.fade-out {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none; /* Crucial: allows clicking through after fade */
 }
 
 .splash-content {

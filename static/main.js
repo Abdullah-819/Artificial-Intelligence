@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const splash = document.getElementById('splashScreen');
     setTimeout(() => {
         splash.classList.add('fade-out');
+        // Completely remove from layout after fade out
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 1000);
     }, 2500);
 
     const summarizeBtn = document.getElementById('summarizeBtn');
