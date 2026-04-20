@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset UI
         progressBar.style.width = '0%';
         progressBar.classList.remove('hidden');
+        document.getElementById('neuralStatus').classList.remove('hidden');
         summarizeBtn.disabled = true;
         
         // Progress Simulation for Professional feel
@@ -60,11 +61,13 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 displayResults(data);
                 progressBar.classList.add('hidden');
+                document.getElementById('neuralStatus').classList.add('hidden');
             }, 600);
 
         } catch (err) {
             clearInterval(interval);
             progressBar.classList.add('hidden');
+            document.getElementById('neuralStatus').classList.add('hidden');
             document.getElementById('errorMsg').innerText = `Error: ${err.message}`;
         } finally {
             summarizeBtn.disabled = false;
@@ -134,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     targetEl.style.direction = 'rtl';
                     targetEl.style.textAlign = 'right';
-                    targetEl.style.fontFamily = 'serif'; // Urdu font feel
+                    targetEl.classList.add('urdu-text');
                     targetEl.innerText = data.translated_text;
                     btn.innerText = 'Reset to English';
                     btn.classList.add('btn-reset');
