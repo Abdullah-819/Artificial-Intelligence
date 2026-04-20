@@ -177,21 +177,25 @@ body, html {
     grid-template-columns: 380px 1fr;
     gap: 1.5rem;
     min-height: 0;
-    overflow: hidden;
+    width: 100%;
 }
 
 .side-panel {
+    grid-column: 1;
     display: grid;
     grid-template-rows: auto 1fr;
     gap: 1.5rem;
     min-width: 0;
+    width: 100%;
 }
 
 .main-panel {
+    grid-column: 2;
     display: grid;
     grid-template-rows: auto 1fr auto;
     gap: 1.5rem;
     min-width: 0;
+    width: 100%;
 }
 
 .panel-card {
