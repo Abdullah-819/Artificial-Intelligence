@@ -92,13 +92,20 @@ class SummarizerService:
     def translate_to_language(self, text: str, target_lang: str = 'ur') -> str:
         """
         Translates the given text into the target language (default: Urdu).
+        Now with robust null-checking to prevent 500 errors.
         """
         from deep_translator import GoogleTranslator
+        if not text or len(text.strip()) == 0:
+            return "No text provided for translation."
+            
         try:
-            return GoogleTranslator(source='auto', target=target_lang).translate(text)
+            translated = GoogleTranslator(source='auto', target=target_lang).translate(text)
+            if translated:
+                return str(translated)
+            return "Translation service returned an empty result. Please try again."
         except Exception as e:
-            print(f"Translation Error: {str(e)}")
-            return "Translation failed. Please check your internet connection."
+            print(f"CRITICAL Translation Error: {str(e)}")
+            return "The translation service is currently busy. Please wait a moment and try again."
 
     def extract_key_points(self, summary: str) -> List[str]:
         """
