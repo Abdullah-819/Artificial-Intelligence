@@ -17,5 +17,12 @@ class SummarizeResponse(BaseModel):
     metadata: VideoInfo
     sentiment: str = "Neutral"
 
+class TranslationRequest(BaseModel):
+    text: str
+    target_lang: str = "ur"
+
+class TranslationResponse(BaseModel):
+    translated_text: str
+
 class ErrorResponse(BaseModel):
     detail: str

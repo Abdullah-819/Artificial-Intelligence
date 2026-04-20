@@ -311,6 +311,23 @@ body {
 
 .hidden { display: none !important; }
 
+.btn-translate {
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    color: var(--primary-light);
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-translate:hover {
+    background: var(--primary);
+    color: white;
+}
+
 @media (max-width: 1000px) {
     .content-grid { grid-template-columns: 1fr; }
     .header-container { flex-direction: column; gap: 1.5rem; padding: 1.5rem; }

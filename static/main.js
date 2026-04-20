@@ -111,4 +111,45 @@ document.addEventListener('DOMContentLoaded', () => {
         body.classList.toggle('hidden');
         arrow.classList.toggle('rotate-90');
     });
+
+    // Translation Logic
+    document.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('btn-translate')) {
+            const btn = e.target;
+            const targetId = btn.getAttribute('data-target');
+            const targetEl = document.getElementById(targetId);
+            const originalText = targetEl.innerText;
+            
+            btn.disabled = true;
+            btn.innerText = 'Translating...';
+            
+            try {
+                const response = await fetch('/api/v1/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: originalText, target_lang: 'ur' })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    targetEl.style.direction = 'rtl';
+                    targetEl.style.textAlign = 'right';
+                    targetEl.style.fontFamily = 'serif'; // Urdu font feel
+                    targetEl.innerText = data.translated_text;
+                    btn.innerText = 'Reset to English';
+                    btn.classList.add('btn-reset');
+                    btn.classList.remove('btn-translate');
+                }
+            } catch (err) {
+                console.error(err);
+                btn.innerText = 'Error!';
+            } finally {
+                btn.disabled = false;
+            }
+        } else if (e.target.classList.contains('btn-reset')) {
+            // Potentially we store original text, but for now just re-run or refresh
+            // For a better experience, we should store it.
+            location.reload(); // Simple way for now
+        }
+    });
 });

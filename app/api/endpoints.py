@@ -1,5 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends
-from app.models.schemas import SummarizeRequest, SummarizeResponse
+from app.models.schemas import (
+    SummarizeRequest, 
+    SummarizeResponse, 
+    TranslationRequest, 
+    TranslationResponse
+)
 from app.services.youtube import youtube_service
 from app.services.summarizer import nlp_service
 from app.exceptions.handlers import VideoTranscriptError, InvalidYouTubeURLError
@@ -47,4 +52,15 @@ async def summarize_video(request: SummarizeRequest):
         metadata=metadata,
         sentiment=sentiment
     )
+
+@router.post("/translate", response_model=TranslationResponse)
+async def translate_text(request: TranslationRequest):
+    """
+    Endpoint to translate any text (usually the summary) into Urdu or other languages.
+    """
+    try:
+        translated = nlp_service.translate_to_language(request.text, request.target_lang)
+        return TranslationResponse(translated_text=translated)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Translation failed: {str(e)}")
 

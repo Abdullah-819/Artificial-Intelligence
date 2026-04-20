@@ -89,6 +89,17 @@ class SummarizerService:
         one_liner = one_liner.replace("Summarize this in one very simple sentence for a child: ", "")
         return one_liner
 
+    def translate_to_language(self, text: str, target_lang: str = 'ur') -> str:
+        """
+        Translates the given text into the target language (default: Urdu).
+        """
+        from deep_translator import GoogleTranslator
+        try:
+            return GoogleTranslator(source='auto', target=target_lang).translate(text)
+        except Exception as e:
+            print(f"Translation Error: {str(e)}")
+            return "Translation failed. Please check your internet connection."
+
     def extract_key_points(self, summary: str) -> List[str]:
         """
         Extract key points from the summary as bullet points.
