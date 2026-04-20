@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Summarizer | Premium Studio</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="blob-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="container">
+        <header class="hero">
+            <div class="badge">AI Powered Intelligence</div>
+            <h1>YouTube <span class="gradient-text">Summarizer</span></h1>
+            <p>Transform lengthy videos into structured insights in seconds. Powered by advanced Neural Networks.</p>
+        </header>
+
+        <section class="input-section">
+            <div class="input-wrapper">
+                <i class="fa-brands fa-youtube icon-youtube"></i>
+                <input type="text" id="urlInput" placeholder="Paste YouTube video URL here..." autocomplete="off">
+                <button id="summarizeBtn">
+                    <span>Summarize</span>
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </button>
+            </div>
+            <div class="error-msg" id="errorMsg"></div>
+        </section>
+
+        <section class="loading-state hidden" id="loadingState">
+            <div class="loader">
+                <div class="inner-loader"></div>
+                <span>Processing Video Intelligence...</span>
+            </div>
+            <p class="status-info">Downloading transcript and generating AI summary. This may take 10-15 seconds.</p>
+        </section>
+
+        <section class="results-grid hidden" id="resultsGrid">
+            <!-- Summary Column -->
+            <div class="result-card glass summary-card">
+                <div class="card-header">
+                    <i class="fa-solid fa-book-open"></i>
+                    <h3>Executive Summary</h3>
+                </div>
+                <div class="card-body">
+                    <p id="summaryText"></p>
+                </div>
+            </div>
+
+            <!-- Key Points Column -->
+            <div class="result-card glass points-card">
+                <div class="card-header">
+                    <i class="fa-solid fa-list-check"></i>
+                    <h3>Key Insights</h3>
+                </div>
+                <div class="card-body">
+                    <ul id="pointsList"></ul>
+                </div>
+            </div>
+
+            <!-- Transcript Column (Collapsible) -->
+            <div class="result-card glass transcript-card full-width">
+                <div class="card-header toggle-header" id="toggleTranscript">
+                    <div class="header-main">
+                        <i class="fa-solid fa-align-left"></i>
+                        <h3>Full Transcript</h3>
+                    </div>
+                    <i class="fa-solid fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="card-body hidden" id="transcriptBody">
+                    <p id="transcriptText"></p>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button class="btn-secondary" id="copySummary">
+                    <i class="fa-solid fa-copy"></i> Copy Summary
+                </button>
+                <button class="btn-secondary" id="newSummary">
+                    <i class="fa-solid fa-rotate-left"></i> New Video
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 AI Summarizer Studio | Built for Semester Project</p>
+    </footer>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>
