@@ -64,6 +64,31 @@ class SummarizerService:
         if neg_count > pos_count: return "Negative"
         return "Neutral"
 
+    def simplify(self, summary: str) -> str:
+        """
+        Condenses the summary into a single, extremely simple line.
+        """
+        # We use a specific instruction-like approach or just aggressive truncation
+        # For this model, we'll generate a very short sequence
+        inputs = self.tokenizer(
+            "Summarize this in one very simple sentence for a child: " + summary,
+            max_length=512,
+            truncation=True,
+            return_tensors="pt"
+        ).to(self.device)
+        
+        summary_ids = self.model.generate(
+            inputs["input_ids"],
+            max_length=40,
+            min_length=10,
+            do_sample=False
+        )
+        
+        one_liner = self.tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+        # Clean up any "Summarize this..." prefix if the model repeats it
+        one_liner = one_liner.replace("Summarize this in one very simple sentence for a child: ", "")
+        return one_liner
+
     def extract_key_points(self, summary: str) -> List[str]:
         """
         Extract key points from the summary as bullet points.

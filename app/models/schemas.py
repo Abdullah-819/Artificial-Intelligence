@@ -12,6 +12,7 @@ class VideoInfo(BaseModel):
 class SummarizeResponse(BaseModel):
     transcript: str
     summary: str
+    simple_summary: str
     key_points: List[str]
     metadata: VideoInfo
     sentiment: str = "Neutral"

@@ -30,15 +30,19 @@ async def summarize_video(request: SummarizeRequest):
     # 3. Generate summary using AI model
     summary = nlp_service.summarize(transcript)
     
-    # 4. Extract bullet points
+    # 4. Generate ultra-simple one-liner
+    simple_summary = nlp_service.simplify(summary)
+    
+    # 5. Extract bullet points
     key_points = nlp_service.extract_key_points(summary)
     
-    # 5. Analyze Sentiment
+    # 6. Analyze Sentiment
     sentiment = nlp_service.analyze_sentiment(transcript)
     
     return SummarizeResponse(
         transcript=transcript,
         summary=summary,
+        simple_summary=simple_summary,
         key_points=key_points,
         metadata=metadata,
         sentiment=sentiment

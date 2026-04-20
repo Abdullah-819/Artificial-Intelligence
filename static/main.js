@@ -1,19 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Splash screen handler
+    const splash = document.getElementById('splashScreen');
+    setTimeout(() => {
+        splash.classList.add('fade-out');
+    }, 2500);
+
     const summarizeBtn = document.getElementById('summarizeBtn');
     const urlInput = document.getElementById('urlInput');
-    const resultsGrid = document.getElementById('resultsGrid');
-    const loadingState = document.getElementById('loadingState');
-    const errorMsg = document.getElementById('errorMsg');
-
+    const progressBar = document.getElementById('progressBar');
+    const progressFill = document.querySelector('.progress-fill');
+    
     const summaryText = document.getElementById('summaryText');
+    const simpleSummaryText = document.getElementById('simpleSummaryText');
     const pointsList = document.getElementById('pointsList');
     const transcriptText = document.getElementById('transcriptText');
     
-    const toggleTranscript = document.getElementById('toggleTranscript');
-    const transcriptBody = document.getElementById('transcriptBody');
-    const toggleIcon = document.querySelector('.toggle-icon');
+    // Media elements
+    const videoThumb = document.getElementById('videoThumb');
+    const videoTitle = document.getElementById('videoTitle');
+    const videoAuthor = document.getElementById('videoAuthor');
+    const sentimentBadge = document.getElementById('sentimentBadge');
 
-    // Handle Summarize Action
     summarizeBtn.addEventListener('click', performSummarization);
     
     urlInput.addEventListener('keypress', (e) => {
@@ -22,104 +29,81 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function performSummarization() {
         const url = urlInput.value.trim();
-        if (!url) {
-            showError('Please enter a valid YouTube URL');
-            return;
-        }
+        if (!url) return;
 
-        // Reset UI
-        clearError();
-        resultsGrid.classList.add('hidden');
-        document.getElementById('metadataHeader').classList.add('hidden');
-        loadingState.classList.remove('hidden');
+        // Reset and start Loading
+        progressFill.style.width = '0%';
+        progressBar.classList.remove('hidden');
         summarizeBtn.disabled = true;
+        
+        // Progress Simulation
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 5;
+            if (progress > 95) clearInterval(interval);
+            progressFill.style.width = `${progress}%`;
+        }, 300);
 
         try {
             const response = await fetch('/api/v1/summarize', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url: url })
             });
 
             const data = await response.json();
+            if (!response.ok) throw new Error(data.detail);
 
-            if (!response.ok) {
-                const message = data.detail || 'An unexpected error occurred';
-                throw new Error(message);
-            }
+            clearInterval(interval);
+            progressFill.style.width = '100%';
+            
+            // Populate Data
+            setTimeout(() => {
+                displayResults(data);
+                progressBar.classList.add('hidden');
+            }, 500);
 
-            // Display Results
-            displayResults(data);
         } catch (err) {
-            showError(err.message);
+            clearInterval(interval);
+            progressBar.classList.add('hidden');
+            document.getElementById('errorMsg').innerText = err.message;
         } finally {
-            loadingState.classList.add('hidden');
             summarizeBtn.disabled = false;
         }
     }
 
     function displayResults(data) {
-        // Metadata populate
-        document.getElementById('videoTitle').innerText = data.metadata.title;
-        document.getElementById('videoThumb').src = data.metadata.thumbnail;
-        document.getElementById('videoAuthor').innerText = `By ${data.metadata.author}`;
+        // Metadata
+        videoThumb.src = data.metadata.thumbnail;
+        videoTitle.innerText = data.metadata.title;
+        videoAuthor.innerText = data.metadata.author;
         
-        const badge = document.getElementById('sentimentBadge');
-        badge.innerText = data.sentiment;
-        badge.className = `sentiment-badge sentiment-${data.sentiment}`;
-        
-        document.getElementById('wordCount').innerText = data.transcript.split(' ').length;
-        document.getElementById('metadataHeader').classList.remove('hidden');
+        sentimentBadge.innerText = data.sentiment;
+        sentimentBadge.className = `sentiment-badge sentiment-${data.sentiment}`;
 
+        // Summaries
         summaryText.innerText = data.summary;
-        
-        // Populate bullet points
+        simpleSummaryText.innerText = data.simple_summary;
+
+        // Insights
         pointsList.innerHTML = '';
         data.key_points.forEach(point => {
             const li = document.createElement('li');
-            li.innerText = point;
+            li.innerHTML = `<i class="fa-solid fa-arrow-right-long" style="color:var(--primary);margin-right:8px"></i> ${point}`;
             pointsList.appendChild(li);
         });
 
         transcriptText.innerText = data.transcript;
-        
-        resultsGrid.classList.remove('hidden');
-        resultsGrid.scrollIntoView({ behavior: 'smooth' });
     }
 
     // Toggle Transcript
-    toggleTranscript.addEventListener('click', () => {
-        transcriptBody.classList.toggle('hidden');
-        toggleIcon.classList.toggle('rotate');
+    const toggle = document.getElementById('toggleTranscript');
+    const body = document.getElementById('transcriptBody');
+    const arrow = document.querySelector('.arrow');
+    
+    toggle.addEventListener('click', () => {
+        body.classList.toggle('hidden');
+        body.classList.toggle('visible');
+        arrow.classList.toggle('open');
     });
-
-    // Copy Summary Action
-    document.getElementById('copySummary').addEventListener('click', () => {
-        navigator.clipboard.writeText(summaryText.innerText);
-        const originalText = document.getElementById('copySummary').innerHTML;
-        document.getElementById('copySummary').innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-        setTimeout(() => {
-            document.getElementById('copySummary').innerHTML = originalText;
-        }, 2000);
-    });
-
-    // New Summary Action
-    document.getElementById('newSummary').addEventListener('click', () => {
-        urlInput.value = '';
-        resultsGrid.classList.add('hidden');
-        urlInput.focus();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    function showError(msg) {
-        errorMsg.innerText = msg;
-        setTimeout(() => clearError(), 5000);
-    }
-
-    function clearError() {
-        errorMsg.innerText = '';
-    }
 });

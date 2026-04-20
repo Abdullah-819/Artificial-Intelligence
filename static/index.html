@@ -11,104 +11,99 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="splash-layer">
+        <div class="splash-content">
+            <h2 class="dev-tag top">Abdullah Rana <span class="role">Senior MERN Developer</span></h2>
+            <div class="loader-wrapper">
+                <div class="main-loader"></div>
+                <div class="loader-ring"></div>
+            </div>
+            <h2 class="dev-tag bottom">Ahmad Ali <span class="role">Senior MEAN Developer</span></h2>
+        </div>
+    </div>
+
     <div class="blob-container">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
     </div>
 
-    <main class="container">
-        <header class="hero">
-            <div class="badge">AI Powered Intelligence</div>
-            <h1>YouTube <span class="gradient-text">Summarizer</span></h1>
-            <p>Transform lengthy videos into structured insights in seconds. Powered by advanced Neural Networks.</p>
+    <main class="dashboard-wrapper">
+        <header class="app-header">
+            <div class="logo-area">
+                <i class="fa-solid fa-brain"></i>
+                <span>Quantum Summarizer</span>
+            </div>
+            <div class="input-area">
+                <div class="input-group">
+                    <input type="text" id="urlInput" placeholder="Enter video link..." autocomplete="off">
+                    <button id="summarizeBtn"><i class="fa-solid fa-bolt"></i> Process</button>
+                    <div id="progressBar" class="progress-container hidden">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="errorMsg" class="error-toast"></div>
         </header>
 
-        <section class="input-section">
-            <div class="input-wrapper">
-                <i class="fa-brands fa-youtube icon-youtube"></i>
-                <input type="text" id="urlInput" placeholder="Paste YouTube video URL here..." autocomplete="off">
-                <button id="summarizeBtn">
-                    <span>Summarize</span>
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                </button>
-            </div>
-            <div class="error-msg" id="errorMsg"></div>
-        </section>
-
-        <section class="loading-state hidden" id="loadingState">
-            <div class="loader">
-                <div class="inner-loader"></div>
-                <span>Processing Video Intelligence...</span>
-            </div>
-            <p class="status-info">Downloading transcript and generating AI summary. This may take 10-15 seconds.</p>
-        </section>
-
-        <section class="metadata-header hidden" id="metadataHeader">
-            <div class="video-preview glass">
-                <img id="videoThumb" src="" alt="Thumbnail">
-                <div class="video-info">
-                    <h2 id="videoTitle">Video Title</h2>
-                    <p id="videoAuthor">Author Name</p>
-                    <div class="stats-row">
-                        <span class="sentiment-badge" id="sentimentBadge">Neutral</span>
-                        <span class="stat-item"><i class="fa-solid fa-clock"></i> <span id="wordCount">0</span> words</span>
+        <div class="content-grid" id="mainContent">
+            <!-- Left Panel: Video & Insights -->
+            <div class="side-panel">
+                <div class="panel-card video-card">
+                    <img id="videoThumb" src="" alt="">
+                    <h3 id="videoTitle">Ready to summarize</h3>
+                    <p id="videoAuthor">Paste a link to begin</p>
+                    <div class="mood-stat">
+                        <span id="sentimentBadge" class="sentiment-badge">Neutral</span>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="results-grid hidden" id="resultsGrid">
-            <!-- Summary Column -->
-            <div class="result-card glass summary-card">
-                <div class="card-header">
-                    <i class="fa-solid fa-book-open"></i>
-                    <h3>Executive Summary</h3>
-                </div>
-                <div class="card-body">
-                    <p id="summaryText"></p>
+                <div class="panel-card insights-card">
+                    <div class="card-head">
+                        <i class="fa-solid fa-list-ul"></i>
+                        <h4>Key Insights</h4>
+                    </div>
+                    <ul id="pointsList">
+                        <li class="placeholder">Insights will appear here...</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- Key Points Column -->
-            <div class="result-card glass points-card">
-                <div class="card-header">
-                    <i class="fa-solid fa-list-check"></i>
-                    <h3>Key Insights</h3>
+            <!-- Right Panel: Summaries -->
+            <div class="main-panel">
+                <div class="panel-card simple-summary-card">
+                    <div class="card-head">
+                        <i class="fa-solid fa-child-reaching"></i>
+                        <h4>Simplified Summary</h4>
+                        <span class="badge-new">Easy Mode</span>
+                    </div>
+                    <p id="simpleSummaryText" class="big-text">Your one-sentence summary will show up here after processing.</p>
                 </div>
-                <div class="card-body">
-                    <ul id="pointsList"></ul>
-                </div>
-            </div>
-
-            <!-- Transcript Column (Collapsible) -->
-            <div class="result-card glass transcript-card full-width">
-                <div class="card-header toggle-header" id="toggleTranscript">
-                    <div class="header-main">
+                
+                <div class="panel-card detailed-summary-card">
+                    <div class="card-head">
                         <i class="fa-solid fa-align-left"></i>
-                        <h3>Full Transcript</h3>
+                        <h4>Detailed Analysis</h4>
                     </div>
-                    <i class="fa-solid fa-chevron-down toggle-icon"></i>
+                    <div class="scroll-box">
+                        <p id="summaryText">The full AI generated summary will be displayed here.</p>
+                    </div>
                 </div>
-                <div class="card-body hidden" id="transcriptBody">
-                    <p id="transcriptText"></p>
+                
+                <div class="panel-card transcript-mini-card">
+                    <div class="card-head toggle-transcript" id="toggleTranscript">
+                        <div class="h-text">
+                            <i class="fa-solid fa-code"></i>
+                            <h4>Raw Transcript</h4>
+                        </div>
+                        <i class="fa-solid fa-chevron-right arrow"></i>
+                    </div>
+                    <div id="transcriptBody" class="transcript-pane hidden">
+                        <p id="transcriptText"></p>
+                    </div>
                 </div>
             </div>
-            
-            <div class="actions">
-                <button class="btn-secondary" id="copySummary">
-                    <i class="fa-solid fa-copy"></i> Copy Summary
-                </button>
-                <button class="btn-secondary" id="newSummary">
-                    <i class="fa-solid fa-rotate-left"></i> New Video
-                </button>
-            </div>
-        </section>
+        </div>
     </main>
-
-    <footer>
-        <p>&copy; 2026 AI Summarizer Studio | Built for Semester Project</p>
-    </footer>
 
     <script src="/static/main.js"></script>
 </body>
