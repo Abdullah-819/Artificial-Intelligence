@@ -4,10 +4,17 @@ from typing import List, Optional
 class SummarizeRequest(BaseModel):
     url: str
 
+class VideoInfo(BaseModel):
+    title: Optional[str] = "YouTube Video"
+    thumbnail: Optional[str] = ""
+    author: Optional[str] = ""
+
 class SummarizeResponse(BaseModel):
     transcript: str
     summary: str
     key_points: List[str]
+    metadata: VideoInfo
+    sentiment: str = "Neutral"
 
 class ErrorResponse(BaseModel):
     detail: str

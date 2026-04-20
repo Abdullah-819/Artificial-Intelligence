@@ -77,4 +77,24 @@ class YouTubeService:
                 raise VideoTranscriptError("YouTube is temporarily blocking requests from this IP. Please try again later or use a different video.")
             raise VideoTranscriptError(f"Error while fetching transcript: {error_msg}")
 
+    async def get_video_info(self, url: str) -> dict:
+        """
+        Fetches metadata (title, thumbnail) for the video using YouTube's OEmbed.
+        """
+        import httpx
+        try:
+            oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
+            async with httpx.AsyncClient() as client:
+                response = await client.get(oembed_url)
+                if response.status_code == 200:
+                    data = response.json()
+                    return {
+                        "title": data.get("title"),
+                        "thumbnail": data.get("thumbnail_url"),
+                        "author": data.get("author_name")
+                    }
+        except:
+            pass
+        return {"title": "YouTube Video", "thumbnail": "", "author": "Unknown"}
+
 youtube_service = YouTubeService()

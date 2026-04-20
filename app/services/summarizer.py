@@ -18,10 +18,17 @@ class SummarizerService:
     def summarize(self, text: str) -> str:
         """
         Generate a concise summary for the given text.
+        Includes a safety check for non-English characters to avoid garbage output.
         """
-        # Truncate if the text is too long for the model
+        # Truncate if the text is too long
         max_input_length = 1024
         
+        # Safety Check: If more than 30% of characters are non-ASCII,
+        # distilbart will produce garbage.
+        non_ascii = len([c for c in text[:500] if ord(c) > 127])
+        if non_ascii > (min(len(text), 500) * 0.3):
+            return "Note: This video contains non-English speech. Summarization is currently optimized for English, but you can still view the full transcript below."
+
         # Prepare inputs
         inputs = self.tokenizer(
             text, 
@@ -41,6 +48,21 @@ class SummarizerService:
         
         summary = self.tokenizer.decode(summary_ids[0], skip_special_tokens=True)
         return summary
+
+    def analyze_sentiment(self, text: str) -> str:
+        """
+        Heuristic-based sentiment analysis for speed and reliability.
+        """
+        positive_words = ['good', 'great', 'excellent', 'amazing', 'happy', 'success', 'love', 'positive', 'win']
+        negative_words = ['bad', 'poor', 'fail', 'error', 'hate', 'negative', 'wrong', 'sad', 'loss', 'war', 'death']
+        
+        text_lower = text.lower()
+        pos_count = sum(1 for word in positive_words if word in text_lower)
+        neg_count = sum(1 for word in negative_words if word in text_lower)
+        
+        if pos_count > neg_count: return "Positive"
+        if neg_count > pos_count: return "Negative"
+        return "Neutral"
 
     def extract_key_points(self, summary: str) -> List[str]:
         """

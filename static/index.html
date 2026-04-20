@@ -44,6 +44,20 @@
             <p class="status-info">Downloading transcript and generating AI summary. This may take 10-15 seconds.</p>
         </section>
 
+        <section class="metadata-header hidden" id="metadataHeader">
+            <div class="video-preview glass">
+                <img id="videoThumb" src="" alt="Thumbnail">
+                <div class="video-info">
+                    <h2 id="videoTitle">Video Title</h2>
+                    <p id="videoAuthor">Author Name</p>
+                    <div class="stats-row">
+                        <span class="sentiment-badge" id="sentimentBadge">Neutral</span>
+                        <span class="stat-item"><i class="fa-solid fa-clock"></i> <span id="wordCount">0</span> words</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="results-grid hidden" id="resultsGrid">
             <!-- Summary Column -->
             <div class="result-card glass summary-card">

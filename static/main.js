@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset UI
         clearError();
         resultsGrid.classList.add('hidden');
+        document.getElementById('metadataHeader').classList.add('hidden');
         loadingState.classList.remove('hidden');
         summarizeBtn.disabled = true;
 
@@ -61,6 +62,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayResults(data) {
+        // Metadata populate
+        document.getElementById('videoTitle').innerText = data.metadata.title;
+        document.getElementById('videoThumb').src = data.metadata.thumbnail;
+        document.getElementById('videoAuthor').innerText = `By ${data.metadata.author}`;
+        
+        const badge = document.getElementById('sentimentBadge');
+        badge.innerText = data.sentiment;
+        badge.className = `sentiment-badge sentiment-${data.sentiment}`;
+        
+        document.getElementById('wordCount').innerText = data.transcript.split(' ').length;
+        document.getElementById('metadataHeader').classList.remove('hidden');
+
         summaryText.innerText = data.summary;
         
         // Populate bullet points
