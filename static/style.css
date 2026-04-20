@@ -21,7 +21,7 @@ body, html {
     font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-primary);
-    overflow: hidden; /* Non-scrolling */
+    overflow: hidden;
 }
 
 /* Splash Screen */
@@ -87,22 +87,24 @@ body, html {
     to { transform: rotate(360deg); }
 }
 
-/* Main Layout */
+/* Base Layout */
 .dashboard-wrapper {
     height: 100vh;
+    width: 100vw;
     display: flex;
     flex-direction: column;
-    padding: 1rem;
+    padding: 1.5rem;
+    gap: 1.5rem;
 }
 
 .app-header {
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 1rem;
-    margin-bottom: 1rem;
+    padding: 1rem 1.5rem;
     background: var(--bg-card);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     border: 1px solid var(--border);
 }
 
@@ -152,7 +154,6 @@ body, html {
     transition: background 0.3s;
 }
 
-/* Progress Bar Overlay on input */
 .progress-container {
     position: absolute;
     bottom: 0;
@@ -172,32 +173,34 @@ body, html {
 .content-grid {
     flex: 1;
     display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 1rem;
-    overflow: hidden; /* Prevent scrolling */
-}
-
-.panel-card {
-    background: var(--bg-card);
-    border-radius: 1rem;
-    border: 1px solid var(--border);
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: 380px 1fr;
+    gap: 1.5rem;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .side-panel {
     display: grid;
     grid-template-rows: auto 1fr;
-    gap: 1rem;
-    height: 100%;
+    gap: 1.5rem;
+    min-width: 0;
 }
 
 .main-panel {
     display: grid;
-    grid-template-rows: auto 1fr 100px;
-    gap: 1rem;
-    height: 100%;
+    grid-template-rows: auto 1fr auto;
+    gap: 1.5rem;
+    min-width: 0;
+}
+
+.panel-card {
+    background: var(--bg-card);
+    border-radius: 1.5rem;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 /* Video Card */
@@ -225,23 +228,6 @@ body, html {
 }
 
 /* Insights Card */
-.insights-card {
-    overflow: hidden;
-}
-
-.card-head {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    color: var(--primary-light);
-}
-
-.card-head h4 {
-    color: white;
-    font-size: 1rem;
-}
-
 #pointsList {
     list-style: none;
     overflow-y: auto;
@@ -256,11 +242,6 @@ body, html {
     font-size: 0.85rem;
     line-height: 1.4;
     border: 1px solid transparent;
-    transition: border 0.3s;
-}
-
-#pointsList li:hover {
-    border-color: var(--primary);
 }
 
 /* Simple Summary Card */
@@ -283,9 +264,10 @@ body, html {
     border-radius: 4px;
     font-weight: 800;
     text-transform: uppercase;
+    margin-left: 10px;
 }
 
-/* Scroll Box for Detailed Summary */
+/* Scroll Boxes */
 .scroll-box {
     overflow-y: auto;
     flex: 1;
@@ -298,7 +280,6 @@ body, html {
     color: var(--text-secondary);
 }
 
-/* Transcript Pane */
 .transcript-pane {
     max-height: 0;
     overflow-y: auto;
@@ -306,7 +287,7 @@ body, html {
 }
 
 .transcript-pane.visible {
-    max-height: 400px;
+    max-height: 200px;
 }
 
 .toggle-transcript {
@@ -322,17 +303,45 @@ body, html {
     transform: rotate(90deg);
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 4px;
-}
-::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 10px;
+.card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    color: var(--primary-light);
 }
 
-.hidden { display: none; }
-.error-toast { color: #ef4444; font-size: 0.8rem; }
+.card-head h4 {
+    color: white;
+    font-size: 1rem;
+}
+
+/* Background Blobs */
+.blob-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    filter: blur(80px);
+    overflow: hidden;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.2;
+    animation: move 20s infinite alternate;
+}
+
+.blob-1 { width: 400px; height: 400px; background: #4f46e5; top: -100px; left: -100px; }
+.blob-2 { width: 500px; height: 500px; background: #7c3aed; bottom: -150px; right: -100px; }
+
+@keyframes move {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(100px, 50px) scale(1.1); }
+}
 
 .sentiment-badge {
     padding: 4px 12px;
@@ -340,3 +349,8 @@ body, html {
     font-size: 0.7rem;
     background: rgba(255,255,255,0.05);
 }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+.hidden { display: none; }
