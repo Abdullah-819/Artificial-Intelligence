@@ -3,107 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Video Summarizer | Premium Studio</title>
+    <title>Quantum AI | Enterprise Summarizer</title>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Splash Screen -->
+    <!-- Corporate Splash Overlay -->
     <div id="splashScreen" class="splash-layer">
         <div class="splash-content">
-            <h2 class="dev-tag top">Abdullah Rana <span class="role">Senior MERN Developer</span></h2>
+            <h2 class="dev-tag">Abdullah Rana <span class="role">Chief AI Architect / MERN</span></h2>
             <div class="loader-wrapper">
                 <div class="main-loader"></div>
-                <div class="loader-ring"></div>
             </div>
-            <h2 class="dev-tag bottom">Ahmad Ali <span class="role">Senior MEAN Developer</span></h2>
+            <h2 class="dev-tag">Ahmad Ali <span class="role">Senior Systems Design / MEAN</span></h2>
         </div>
     </div>
 
-    <div class="blob-container">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
-
-    <main class="dashboard-wrapper">
-        <header class="app-header">
-            <div class="logo-area">
-                <i class="fa-solid fa-brain"></i>
-                <span>Quantum Summarizer</span>
-            </div>
-            <div class="input-area">
-                <div class="input-group">
-                    <input type="text" id="urlInput" placeholder="Enter video link..." autocomplete="off">
-                    <button id="summarizeBtn"><i class="fa-solid fa-bolt"></i> Process</button>
-                    <div id="progressBar" class="progress-container hidden">
-                        <div class="progress-fill"></div>
-                    </div>
+    <!-- Navigation Architecture -->
+    <header class="app-header">
+        <div class="header-container">
+            <a href="/" class="logo-brand">
+                <i class="fa-solid fa-bolt-lightning"></i>
+                <span>Quantum AI</span>
+            </a>
+            
+            <div class="search-nexus">
+                <div class="nexus-input-group">
+                    <input type="text" id="urlInput" placeholder="Paste YouTube link for neural analysis..." autocomplete="off">
+                    <button id="summarizeBtn" class="btn-nexus">
+                        <i class="fa-solid fa-microchip"></i>
+                        Generate
+                    </button>
+                    <div id="progressBar" class="progress-nexus hidden"></div>
                 </div>
+                <div id="errorMsg" class="error-toast"></div>
             </div>
-            <div id="errorMsg" class="error-toast"></div>
-        </header>
 
+            <div class="header-actions">
+                <div class="badge-tier">v1.2 Stable</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Core Experience -->
+    <main class="main-wrapper">
         <div class="content-grid" id="mainContent">
-            <!-- Left Panel: Video & Insights -->
-            <div class="side-panel">
-                <div class="panel-card video-card">
-                    <img id="videoThumb" src="" alt="">
-                    <h3 id="videoTitle">Ready to summarize</h3>
-                    <p id="videoAuthor">Paste a link to begin</p>
-                    <div class="mood-stat">
-                        <span id="sentimentBadge" class="sentiment-badge">Neutral</span>
-                    </div>
-                </div>
-                <div class="panel-card insights-card">
-                    <div class="card-head">
-                        <i class="fa-solid fa-list-ul"></i>
-                        <h4>Key Insights</h4>
-                    </div>
-                    <ul id="pointsList">
-                        <li class="placeholder">Insights will appear here...</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Right Panel: Summaries -->
-            <div class="main-panel">
-                <div class="panel-card simple-summary-card">
-                    <div class="card-head">
-                        <i class="fa-solid fa-child-reaching"></i>
-                        <h4>Simplified Summary</h4>
-                        <span class="badge-new">Easy Mode</span>
-                    </div>
-                    <p id="simpleSummaryText" class="big-text">Your one-sentence summary will show up here after processing.</p>
-                </div>
-                
-                <div class="panel-card detailed-summary-card">
-                    <div class="card-head">
-                        <i class="fa-solid fa-align-left"></i>
-                        <h4>Detailed Analysis</h4>
-                    </div>
-                    <div class="scroll-box">
-                        <p id="summaryText">The full AI generated summary will be displayed here.</p>
-                    </div>
-                </div>
-                
-                <div class="panel-card transcript-mini-card">
-                    <div class="card-head toggle-transcript" id="toggleTranscript">
-                        <div class="h-text">
-                            <i class="fa-solid fa-code"></i>
-                            <h4>Raw Transcript</h4>
+            
+            <!-- Left Meta-Column -->
+            <aside class="side-panel">
+                <div class="card-enterprise video-hero">
+                    <img id="videoThumb" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=2564&ixlib=rb-4.0.3" alt="">
+                    <div class="video-info-box">
+                        <h2 id="videoTitle">Neural Ready</h2>
+                        <div class="author-chip">
+                            <i class="fa-solid fa-circle-user"></i>
+                            <span id="videoAuthor">Waiting for input...</span>
                         </div>
+                        <div class="status-indicators">
+                            <span id="sentimentBadge" class="badge-tier">Awaiting Analysis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-enterprise">
+                    <div class="section-label">
+                        <i class="fa-solid fa-fingerprint"></i>
+                        Key Takeaways
+                    </div>
+                    <div id="pointsList">
+                        <div class="author-chip">Input a URL to begin extraction process.</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Logical-Column -->
+            <section class="main-panel">
+                <!-- Simple Layer -->
+                <div class="card-enterprise">
+                    <div class="section-label">
+                        <i class="fa-solid fa-wand-sparkles"></i>
+                        Executive Digest
+                    </div>
+                    <p id="simpleSummaryText" class="simple-summary-text">The summarized essence of your video content will appear here in a simplified format.</p>
+                </div>
+
+                <!-- Deep Layer -->
+                <div class="card-enterprise">
+                    <div class="section-label">
+                        <i class="fa-solid fa-brain"></i>
+                        Detailed Contextual Analysis
+                    </div>
+                    <p id="summaryText" class="detailed-summary-text">Full natural language processing summary will populate this section after the neural pass.</p>
+                </div>
+
+                <!-- raw context -->
+                <div class="card-enterprise">
+                    <div class="section-label toggle-transcript" id="toggleTranscript" style="cursor: pointer; justify-content: space-between; display: flex;">
+                        <span><i class="fa-solid fa-file-code"></i> RAW TRANSCRIPT DATA</span>
                         <i class="fa-solid fa-chevron-right arrow"></i>
                     </div>
                     <div id="transcriptBody" class="transcript-pane hidden">
-                        <p id="transcriptText"></p>
+                        <p id="transcriptText" style="opacity: 0.7; font-size: 0.9rem;"></p>
                     </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer-nexus">
+        <div class="footer-content">
+            <div class="footer-meta">
+                <p>&copy; 2026 Quantum AI Systems. All rights reserved.</p>
+                <div class="dev-credits">
+                    <a href="#" class="dev-link">Abdullah Rana</a>
+                    <a href="#" class="dev-link">Ahmad Ali</a>
                 </div>
             </div>
         </div>
-    </main>
+    </footer>
 
     <script src="/static/main.js"></script>
 </body>

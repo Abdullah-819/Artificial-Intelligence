@@ -3,30 +3,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const splash = document.getElementById('splashScreen');
     setTimeout(() => {
         splash.classList.add('fade-out');
-        // Completely remove from layout after fade out
-        setTimeout(() => {
-            splash.style.display = 'none';
-        }, 1000);
+        setTimeout(() => { splash.style.display = 'none'; }, 1000);
     }, 2500);
 
     const summarizeBtn = document.getElementById('summarizeBtn');
     const urlInput = document.getElementById('urlInput');
     const progressBar = document.getElementById('progressBar');
-    const progressFill = document.querySelector('.progress-fill');
     
+    // Core Display Elements
     const summaryText = document.getElementById('summaryText');
     const simpleSummaryText = document.getElementById('simpleSummaryText');
     const pointsList = document.getElementById('pointsList');
     const transcriptText = document.getElementById('transcriptText');
     
-    // Media elements
+    // Metadata Elements
     const videoThumb = document.getElementById('videoThumb');
     const videoTitle = document.getElementById('videoTitle');
     const videoAuthor = document.getElementById('videoAuthor');
     const sentimentBadge = document.getElementById('sentimentBadge');
 
     summarizeBtn.addEventListener('click', performSummarization);
-    
     urlInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') performSummarization();
     });
@@ -35,18 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = urlInput.value.trim();
         if (!url) return;
 
-        // Reset and start Loading
-        progressFill.style.width = '0%';
+        // Reset UI
+        progressBar.style.width = '0%';
         progressBar.classList.remove('hidden');
         summarizeBtn.disabled = true;
         
-        // Progress Simulation
+        // Progress Simulation for Professional feel
         let progress = 0;
         const interval = setInterval(() => {
-            progress += Math.random() * 5;
-            if (progress > 95) clearInterval(interval);
-            progressFill.style.width = `${progress}%`;
-        }, 300);
+            progress += Math.random() * 8;
+            if (progress > 96) clearInterval(interval);
+            progressBar.style.width = `${progress}%`;
+        }, 200);
 
         try {
             const response = await fetch('/api/v1/summarize', {
@@ -59,55 +55,60 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(data.detail);
 
             clearInterval(interval);
-            progressFill.style.width = '100%';
+            progressBar.style.width = '100%';
             
-            // Populate Data
             setTimeout(() => {
                 displayResults(data);
                 progressBar.classList.add('hidden');
-            }, 500);
+            }, 600);
 
         } catch (err) {
             clearInterval(interval);
             progressBar.classList.add('hidden');
-            document.getElementById('errorMsg').innerText = err.message;
+            document.getElementById('errorMsg').innerText = `Error: ${err.message}`;
         } finally {
             summarizeBtn.disabled = false;
         }
     }
 
     function displayResults(data) {
-        // Metadata
+        // Metadata populate
         videoThumb.src = data.metadata.thumbnail;
         videoTitle.innerText = data.metadata.title;
         videoAuthor.innerText = data.metadata.author;
         
         sentimentBadge.innerText = data.sentiment;
-        sentimentBadge.className = `sentiment-badge sentiment-${data.sentiment}`;
+        sentimentBadge.className = `badge-tier sentiment-${data.sentiment}`;
 
-        // Summaries
+        // Text populate
         summaryText.innerText = data.summary;
         simpleSummaryText.innerText = data.simple_summary;
 
-        // Insights
+        // Key points build
         pointsList.innerHTML = '';
         data.key_points.forEach(point => {
-            const li = document.createElement('li');
-            li.innerHTML = `<i class="fa-solid fa-arrow-right-long" style="color:var(--primary);margin-right:8px"></i> ${point}`;
-            pointsList.appendChild(li);
+            const div = document.createElement('div');
+            div.className = 'point-item';
+            div.innerHTML = `
+                <i class="fa-solid fa-check-double point-icon"></i>
+                <p>${point}</p>
+            `;
+            pointsList.appendChild(div);
         });
 
         transcriptText.innerText = data.transcript;
+        
+        // Smooth scroll to top of content
+        window.scrollTo({ top: 300, behavior: 'smooth' });
     }
 
-    // Toggle Transcript
+    // Toggle logic for transcript
     const toggle = document.getElementById('toggleTranscript');
     const body = document.getElementById('transcriptBody');
-    const arrow = document.querySelector('.arrow');
+    const arrow = toggle.querySelector('.arrow');
     
     toggle.addEventListener('click', () => {
         body.classList.toggle('hidden');
-        body.classList.toggle('visible');
-        arrow.classList.toggle('open');
+        arrow.classList.toggle('rotate-90');
     });
 });
