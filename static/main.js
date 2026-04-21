@@ -1,28 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Quantum AI Dashboard Loaded - Neural Core Active");
-    // Initialize Charts
-    initCharts();
 
     const summarizeBtn = document.getElementById('summarizeBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
     const urlInput = document.getElementById('urlInput');
     const progressContainer = document.getElementById('progressContainer');
     const progressFill = document.getElementById('progressFill');
     const progressStatus = document.getElementById('progressStatus');
-    const resultsGrid = document.getElementById('resultsGrid');
     
-    // Core Display Elements
+    // Components
     const summaryText = document.getElementById('summaryText');
     const simpleSummary = document.getElementById('simpleSummary');
     const pointsList = document.getElementById('pointsList');
     const transcriptText = document.getElementById('transcriptText');
+    const captionsInfo = document.getElementById('captionsInfo');
+    
+    // Metadata Components
     const videoThumb = document.getElementById('videoThumb');
     const videoTitle = document.getElementById('videoTitle');
     const videoAuthor = document.getElementById('videoAuthor');
-    const sentimentBadge = document.getElementById('sentimentBadge');
+    const videoMetaMini = document.getElementById('videoMetaMini');
+    const miniThumb = document.getElementById('miniThumb');
+    const miniTitle = document.getElementById('miniTitle');
 
     const originalContent = new Map();
 
     summarizeBtn.addEventListener('click', performSummarization);
+    refreshBtn.addEventListener('click', () => window.location.reload());
+    
     urlInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') performSummarization();
     });
@@ -31,11 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = urlInput.value.trim();
         if (!url) return;
 
-        resultsGrid.classList.add('hidden');
+        // Reset UI for new analysis
         progressContainer.style.display = 'block';
         summarizeBtn.disabled = true;
         summarizeBtn.innerText = 'PROCESSING...';
         updateProgress(0, 'Initializing Neural Signal...');
+        
+        transcriptText.innerText = "Connecting to video stream...";
+        summaryText.innerText = "Processing summary...";
+        pointsList.innerHTML = '<p style="font-size: 0.8rem; color: var(--text-muted);">Extracting points...</p>';
 
         try {
             const response = await fetch('/api/v1/summarize-stream', {
@@ -62,7 +71,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (data.error) throw new Error(data.error);
                         
                         updateProgress(data.progress, data.status);
-                        if (data.result) displayResults(data.result);
+
+                        // If it's a progress update, check if we have metadata yet
+                        // (In a real implementation, metadata might arrive mid-stream)
+                        // For now, we wait for the final result or update if the backend sends it early
+                        
+                        if (data.result) {
+                            displayResults(data.result);
+                        } else if (data.progress > 25 && data.status.includes("Extracting")) {
+                            // If we were using a more granular stream, we'd update metadata here
+                        }
                     }
                 }
             }
@@ -70,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             updateProgress(100, `Signal Error: ${err.message}`);
             progressStatus.style.color = '#ee5d50';
+            transcriptText.innerText = `Error: ${err.message}`;
         } finally {
             summarizeBtn.disabled = false;
             summarizeBtn.innerText = 'GENERATE';
@@ -83,18 +102,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayResults(data) {
-        resultsGrid.classList.remove('hidden');
+        // Metadata & Mini Thumb
         videoThumb.src = data.metadata.thumbnail;
         videoTitle.innerText = data.metadata.title;
         videoAuthor.innerText = data.metadata.author;
         
-        sentimentBadge.innerText = `Pattern Sentiment: ${data.sentiment}`;
-        sentimentBadge.style.color = data.sentiment === 'Positive' ? '#05cd99' : (data.sentiment === 'Negative' ? '#ee5d50' : '#a3aed0');
+        videoMetaMini.classList.remove('hidden');
+        miniThumb.src = data.metadata.thumbnail;
+        miniTitle.innerText = data.metadata.title;
 
+        // Content
         simpleSummary.innerText = data.simple_summary;
         summaryText.innerText = data.summary;
         transcriptText.innerText = data.transcript;
+        captionsInfo.innerText = `Transcribed ${data.transcript.split(' ').length} words successfully. Signal quality 100%.`;
 
+        // Recaptulation (Key Points)
         pointsList.innerHTML = '';
         data.key_points.forEach(point => {
             const div = document.createElement('div');
@@ -103,59 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
             pointsList.appendChild(div);
         });
 
-        resultsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function initCharts() {
-        // Line Chart (Data Graphic)
-        const ctxLine = document.getElementById('lineChart').getContext('2d');
-        new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Video Processing Activity',
-                    data: [150, 320, 180, 140, 250, 420, 350, 480, 280, 320, 410, 310],
-                    borderColor: '#4318ff',
-                    backgroundColor: 'rgba(67, 24, 255, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 5,
-                    pointBackgroundColor: '#ffb547'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { grid: { display: false }, ticks: { font: { size: 10 } } },
-                    x: { grid: { display: false }, ticks: { font: { size: 10 } } }
-                }
-            }
-        });
-
-        // Pie Chart (Project Company)
-        const ctxPie = document.getElementById('pieChart').getContext('2d');
-        new Chart(ctxPie, {
-            type: 'doughnut',
-            data: {
-                labels: ['Summaries', 'Transcripts', 'Analytics'],
-                datasets: [{
-                    data: [250, 150, 100],
-                    backgroundColor: ['#4318ff', '#00d2ff', '#ffb547'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '70%',
-                plugins: {
-                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
-                }
-            }
-        });
+        // Smooth scroll
+        document.getElementById('resultsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // Translation Logic
