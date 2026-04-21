@@ -16,11 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoTitle = document.getElementById('videoTitle');
     const videoAuthor = document.getElementById('videoAuthor');
 
+    console.log("Summarize Button Element:", summarizeBtn);
+
     // Smooth Scrolling for Sidebar Routes
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('href');
+            console.log("Navigating to:", targetId);
             const targetEl = document.querySelector(targetId);
             
             // Update Active State
@@ -33,26 +36,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    summarizeBtn.addEventListener('click', performSummarization);
+    if (summarizeBtn) {
+        summarizeBtn.addEventListener('click', () => {
+            console.log("Generate Button Clicked");
+            performSummarization();
+        });
+    }
+
     urlInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') performSummarization();
     });
 
     async function performSummarization() {
         const url = urlInput.value.trim();
-        if (!url) return;
+        console.log("URL Input Value:", url);
+        
+        if (!url) {
+            alert("Please paste a valid YouTube URL first.");
+            return;
+        }
 
         // Reset UI
-        progressContainer.classList.remove('hidden');
+        if (progressContainer) progressContainer.classList.remove('hidden');
         summarizeBtn.disabled = true;
         summarizeBtn.innerText = 'PROCESSING...';
         updateProgress(5, 'Connecting to Neural Hub...');
         
-        transcriptText.innerText = "Initiating signal decomposition...";
-        summaryText.innerText = "";
-        pointsList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Filtering signals...</p>';
+        if (transcriptText) transcriptText.innerText = "Initiating signal decomposition...";
+        if (summaryText) summaryText.innerText = "";
+        if (pointsList) pointsList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Filtering signals...</p>';
 
         try {
+            console.log("Starting stream fetch...");
             const response = await fetch('/api/v1/summarize-stream', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -74,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (const line of lines) {
                     if (line.startsWith('data: ')) {
                         const data = JSON.parse(line.replace('data: ', ''));
+                        console.log("Stream data received:", data);
                         if (data.error) throw new Error(data.error);
                         
                         updateProgress(data.progress, data.status);
@@ -86,50 +102,54 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
         } catch (err) {
+            console.error("Transcription Error:", err);
             updateProgress(100, `Signal Failed: ${err.message}`);
-            progressStatus.style.color = '#f87171';
-            transcriptText.innerText = `Error: ${err.message}`;
+            if (progressStatus) progressStatus.style.color = '#f87171';
+            if (transcriptText) transcriptText.innerText = `Error: ${err.message}`;
         } finally {
             summarizeBtn.disabled = false;
             summarizeBtn.innerText = 'GENERATE TRANSCRIPTION';
-            setTimeout(() => { progressContainer.classList.add('hidden'); }, 8000);
+            setTimeout(() => { if (progressContainer) progressContainer.classList.add('hidden'); }, 8000);
         }
     }
 
     function updateProgress(percent, status) {
-        progressFill.style.width = `${percent}%`;
-        progressStatus.innerText = status;
+        if (progressFill) progressFill.style.width = `${percent}%`;
+        if (progressStatus) progressStatus.innerText = status;
     }
 
     function displayResults(data) {
+        console.log("Displaying final results:", data);
         // Metadata
-        videoThumb.src = data.metadata.thumbnail;
-        videoTitle.innerText = data.metadata.title;
-        videoAuthor.innerText = data.metadata.author;
+        if (videoThumb) videoThumb.src = data.metadata.thumbnail;
+        if (videoTitle) videoTitle.innerText = data.metadata.title;
+        if (videoAuthor) videoAuthor.innerText = data.metadata.author;
 
         // Content
-        simpleSummary.innerText = data.simple_summary;
-        summaryText.innerText = data.summary;
-        transcriptText.innerText = data.transcript;
+        if (simpleSummary) simpleSummary.innerText = data.simple_summary;
+        if (summaryText) summaryText.innerText = data.summary;
+        if (transcriptText) transcriptText.innerText = data.transcript;
 
         // Bullet Points
-        pointsList.innerHTML = '';
-        data.key_points.forEach(point => {
-            const div = document.createElement('div');
-            div.style.display = 'flex';
-            div.style.gap = '10px';
-            div.style.padding = '10px';
-            div.style.background = 'rgba(255,255,255,0.03)';
-            div.style.borderRadius = '10px';
-            div.innerHTML = `<i class="fa-solid fa-square-rss" style="color: var(--accent); margin-top: 4px;"></i> <p style="font-size: 0.85rem; font-weight: 600;">${point}</p>`;
-            pointsList.appendChild(div);
-        });
+        if (pointsList) {
+            pointsList.innerHTML = '';
+            data.key_points.forEach(point => {
+                const div = document.createElement('div');
+                div.style.display = 'flex';
+                div.style.gap = '10px';
+                div.style.padding = '10px';
+                div.style.background = 'rgba(255,255,255,0.03)';
+                div.style.borderRadius = '10px';
+                div.innerHTML = `<i class="fa-solid fa-square-rss" style="color: var(--accent); margin-top: 4px;"></i> <p style="font-size: 0.85rem; font-weight: 600;">${point}</p>`;
+                pointsList.appendChild(div);
+            });
+        }
 
-        // Final Scroll to Thumbnail to show results
-        videoThumb.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Final Scroll to results
+        if (videoThumb) videoThumb.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // Translation Logic (Reset capability)
+    // Translation Logic
     const originalContent = new Map();
     document.addEventListener('click', async (e) => {
         if (e.target.classList.contains('btn-translate')) {
