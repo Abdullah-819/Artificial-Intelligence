@@ -1,0 +1,88 @@
+========================================================================
+🚀 YOUTUBE AI VIDEO SUMMARIZER - EXECUTION GUIDE
+========================================================================
+
+This guide will help you set up and run the YouTube AI Video Summarizer
+project from scratch.
+
+------------------------------------------------------------------------
+1. PREREQUISITES
+------------------------------------------------------------------------
+- Python 3.8 or higher installed on your system.
+- Internet connection (for installing libraries and AI model weights).
+
+------------------------------------------------------------------------
+2. SETTING UP THE ENVIRONMENT
+------------------------------------------------------------------------
+Open your terminal (CMD, PowerShell, or Bash) in the project root 
+folder (d:\Semester Project\AI) and follow these steps:
+
+Step A: Create a Virtual Environment (Recommended)
+   python -m venv venv
+
+Step B: Activate the Virtual Environment
+   • On Windows (CMD/PowerShell):
+     venv\Scripts\activate
+   • On Linux/macOS:
+     source venv/bin/activate
+
+------------------------------------------------------------------------
+3. INSTALLING DEPENDENCIES
+------------------------------------------------------------------------
+Once the environment is active, install the required Python libraries:
+
+   pip install -r requirements.txt
+
+*Note: This may take a few minutes as it installs AI libraries like 
+'torch' and 'transformers'.*
+
+------------------------------------------------------------------------
+4. RUNNING THE PROJECT
+------------------------------------------------------------------------
+You can start the server using either of these commands:
+
+Method 1 (Standard):
+   uvicorn app.main:app --reload
+
+Method 2 (Using Python):
+   python -m app.main
+
+------------------------------------------------------------------------
+5. ACCESSING THE APPLICATION
+------------------------------------------------------------------------
+Once the server is running (you should see "Uvicorn running on..."):
+
+1. Open your Web Browser.
+2. Go to: http://127.0.0.1:8000
+   (This will load the premium Frontend dashboard).
+
+3. For API Documentation (Swagger UI):
+   Go to: http://127.0.0.1:8000/docs
+
+------------------------------------------------------------------------
+6. PROJECT STRUCTURE OVERVIEW
+------------------------------------------------------------------------
+- /app     : Backend logic (FastAPI, AI Summarization Service).
+- /static  : Frontend files (HTML, CSS, JavaScript).
+- /venv    : Your local Python environment (don't touch this).
+- requirements.txt : List of all necessary libraries.
+
+------------------------------------------------------------------------
+7. RUNNING TESTS
+------------------------------------------------------------------------
+To ensure everything is working correctly, you can run the test suite:
+
+   pytest
+
+------------------------------------------------------------------------
+8. TROUBLESHOOTING
+------------------------------------------------------------------------
+- If you get "ModuleNotFoundError": Ensure your venv is activated.
+- If transcripts aren't loading: Ensure the YouTube video has 
+  captions/transcripts enabled.
+- First Run Delay: The first time you summarize a video, the AI model 
+  will download (~300MB). Subsequent runs will be much faster.
+
+========================================================================
+DEVELOPED AS A SEMESTER PROJECT
+========================================================================
