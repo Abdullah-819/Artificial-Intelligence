@@ -3,128 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum AI | Enterprise Summarizer</title>
+    <meta name="description" content="Quantum AI - Enterprise YouTube intelligence. Real-time neural summarization and patterns.">
+    <title>Quantum AI Dashboard | Enterprise Video Intelligence</title>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Corporate Splash Overlay -->
-    <div id="splashScreen" class="splash-layer">
-        <div class="splash-content">
-            <h2 class="dev-tag">Abdullah Rana <span class="role">Chief AI Architect / MERN</span></h2>
-            <div class="loader-wrapper">
-                <div class="main-loader"></div>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo-container">
+            <div class="logo-icon">
+                <i class="fa-solid fa-bolt"></i>
             </div>
-            <h2 class="dev-tag">Ahmad Ali <span class="role">Senior Systems Design / MEAN</span></h2>
+            <span class="logo-text">Quantum AI</span>
         </div>
-    </div>
 
-    <!-- Navigation Architecture -->
-    <header class="app-header">
-        <div class="header-container">
-            <a href="/" class="logo-brand">
-                <i class="fa-solid fa-bolt-lightning"></i>
-                <span>Quantum AI</span>
-            </a>
-            
-            <div class="search-nexus">
-                <div class="nexus-input-group">
-                    <input type="text" id="urlInput" placeholder="Paste YouTube link for neural analysis..." autocomplete="off">
-                    <button id="summarizeBtn" class="btn-nexus">
-                        <i class="fa-solid fa-microchip"></i>
-                        Generate
-                    </button>
-                    <div id="progressBar" class="progress-nexus hidden"></div>
-                    <div id="neuralStatus" class="neural-status hidden">Neural Engine v2.0 | Eng: Abdullah Rana & Ahmad Ali</div>
-                </div>
-                <div id="errorMsg" class="error-toast"></div>
-            </div>
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
 
-            <div class="header-actions">
-                <div class="badge-tier">v1.2 Stable</div>
+        <div class="sidebar-footer">
+            <div style="padding: 1rem; background: var(--bg-main); border-radius: 15px; text-align: center;">
+                <p style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem;">DEVELOPED BY</p>
+                <p style="font-size: 0.9rem; font-weight: 800;">Abdullah Rana</p>
+                <p style="font-size: 0.9rem; font-weight: 800;">Ahmad Ali</p>
             </div>
         </div>
-    </header>
+    </aside>
 
-    <!-- Main Core Experience -->
-    <main class="main-wrapper">
-        <div class="content-grid" id="mainContent">
-            
-            <!-- Left Meta-Column -->
-            <aside class="side-panel">
-                <div class="card-enterprise video-hero">
-                    <img id="videoThumb" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=2564&ixlib=rb-4.0.3" alt="">
-                    <div class="video-info-box">
-                        <h2 id="videoTitle">Neural Ready</h2>
-                        <div class="author-chip">
-                            <i class="fa-solid fa-circle-user"></i>
-                            <span id="videoAuthor">Waiting for input...</span>
-                        </div>
-                        <div class="status-indicators">
-                            <span id="sentimentBadge" class="badge-tier">Awaiting Analysis</span>
-                        </div>
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div>
+                <p style="color: var(--text-muted); font-weight: 600; font-size: 0.85rem;">Main Dashboard</p>
+                <h1 class="page-title">Video Intelligence</h1>
+            </div>
+
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                <input type="text" placeholder="Search analytics history...">
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <div class="stat-icon" style="background: var(--bg-main); color: var(--accent); width: 45px; height: 45px;">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+                <div style="width: 45px; height: 45px; border-radius: 50%; background: var(--primary-gradient);"></div>
+            </div>
+        </header>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e7e9fb; color: #4318ff;"><i class="fa-solid fa-video"></i></div>
+                <div class="stat-info">
+                    <span>Total Summaries</span>
+                    <h3>1,248</h3>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e6f7ff; color: #00b5ff;"><i class="fa-solid fa-bolt"></i></div>
+                <div class="stat-info">
+                    <span>Processing Power</span>
+                    <h3>99.9%</h3>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #e6fffb; color: #05cd99;"><i class="fa-solid fa-microchip"></i></div>
+                <div class="stat-info">
+                    <span>Active Neurons</span>
+                    <h3>512K</h3>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fff7e6; color: #ffb547;"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="stat-info">
+                    <span>Data Security</span>
+                    <h3>Enterprise</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Section -->
+        <section class="input-section">
+            <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 1.5rem;">Analyze YouTube Intelligence</h2>
+            <div class="url-input-group">
+                <div class="url-input-wrapper">
+                    <input type="text" id="urlInput" placeholder="Paste YouTube Video URL here for real-time extraction...">
+                    <button id="summarizeBtn" class="btn-generate">GENERATE</button>
+                </div>
+                
+                <!-- Real-Time Progress -->
+                <div id="progressContainer" class="progress-container">
+                    <div class="progress-track">
+                        <div id="progressFill" class="progress-fill"></div>
                     </div>
+                    <p id="progressStatus" class="progress-status">Initializing Signal Processing...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Grid (Results) -->
+        <div id="resultsGrid" class="dashboard-grid hidden">
+            <!-- Left Side: Summary -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h4>Executive Analysis</h4>
+                    <button class="btn-action btn-translate" data-target="summaryText">Translate to Urdu</button>
+                </div>
+                <div id="summaryContent">
+                    <p id="simpleSummary" style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1.5rem; border-left: 5px solid var(--accent); padding-left: 1rem;"></p>
+                    <p id="summaryText" class="summary-text"></p>
+                </div>
+            </div>
+
+            <!-- Right Side: Meta & Points -->
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div class="dashboard-card" style="padding: 1.5rem;">
+                    <img id="videoThumb" src="" class="video-preview" alt="Video Preview">
+                    <h3 id="videoTitle" style="font-size: 1.1rem; margin-bottom: 0.5rem;"></h3>
+                    <p id="videoAuthor" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;"></p>
+                    <div id="sentimentBadge" class="stat-info" style="margin-top: 1rem; padding: 0.5rem 1rem; border-radius: 10px; display: inline-block;"></div>
                 </div>
 
-                <div class="card-enterprise">
-                    <div class="section-label">
-                        <i class="fa-solid fa-fingerprint"></i>
-                        Key Takeaways
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h4>Key Takeaways</h4>
                     </div>
-                    <div id="pointsList">
-                        <div class="author-chip">Input a URL to begin extraction process.</div>
-                    </div>
+                    <div id="pointsList" class="points-list"></div>
                 </div>
-            </aside>
+            </div>
 
-            <!-- Right Logical-Column -->
-            <section class="main-panel">
-                <!-- Simple Layer -->
-                <div class="card-enterprise">
-                    <div class="section-label" style="justify-content: space-between; display: flex;">
-                        <span><i class="fa-solid fa-wand-sparkles"></i> Executive Digest</span>
-                        <button class="btn-translate" data-target="simpleSummaryText">اردو میں ترجمہ کریں</button>
-                    </div>
-                    <p id="simpleSummaryText" class="simple-summary-text">The summarized essence of your video content will appear here in a simplified format.</p>
+            <!-- Transcript Full-Width -->
+            <div class="dashboard-card" style="grid-column: 1 / -1;">
+                <div class="card-header">
+                    <h4>Neural Signal Transcript</h4>
                 </div>
-
-                <!-- Deep Layer -->
-                <div class="card-enterprise">
-                    <div class="section-label" style="justify-content: space-between; display: flex;">
-                        <span><i class="fa-solid fa-brain"></i> Detailed Contextual Analysis</span>
-                        <button class="btn-translate" data-target="summaryText">اردو میں ترجمہ کریں</button>
-                    </div>
-                    <p id="summaryText" class="detailed-summary-text">Full natural language processing summary will populate this section after the neural pass.</p>
-                </div>
-
-                <!-- raw context -->
-                <div class="card-enterprise">
-                    <div class="section-label toggle-transcript" id="toggleTranscript" style="cursor: pointer; justify-content: space-between; display: flex;">
-                        <span><i class="fa-solid fa-file-code"></i> RAW TRANSCRIPT DATA</span>
-                        <i class="fa-solid fa-chevron-right arrow"></i>
-                    </div>
-                    <div id="transcriptBody" class="transcript-pane hidden">
-                        <p id="transcriptText" style="opacity: 0.7; font-size: 0.9rem;"></p>
-                    </div>
-                </div>
-            </section>
+                <div id="transcriptText" class="summary-text" style="font-size: 0.9rem; opacity: 0.8; max-height: 300px; overflow-y: auto; background: var(--bg-main); padding: 1.5rem; border-radius: 20px;"></div>
+            </div>
         </div>
     </main>
-
-    <footer class="footer-nexus">
-        <div class="footer-content">
-            <div class="footer-meta">
-                <p>&copy; 2026 Quantum AI Systems. All rights reserved.</p>
-                <div class="dev-credits">
-                    <a href="#" class="dev-link">Abdullah Rana</a>
-                    <a href="#" class="dev-link">Ahmad Ali</a>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <script src="/static/main.js"></script>
 </body>

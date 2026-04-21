@@ -1,26 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Splash screen handler
-    const splash = document.getElementById('splashScreen');
-    setTimeout(() => {
-        splash.classList.add('fade-out');
-        setTimeout(() => { splash.style.display = 'none'; }, 1000);
-    }, 2500);
-
     const summarizeBtn = document.getElementById('summarizeBtn');
     const urlInput = document.getElementById('urlInput');
-    const progressBar = document.getElementById('progressBar');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressFill = document.getElementById('progressFill');
+    const progressStatus = document.getElementById('progressStatus');
+    const resultsGrid = document.getElementById('resultsGrid');
     
     // Core Display Elements
     const summaryText = document.getElementById('summaryText');
-    const simpleSummaryText = document.getElementById('simpleSummaryText');
+    const simpleSummary = document.getElementById('simpleSummary');
     const pointsList = document.getElementById('pointsList');
     const transcriptText = document.getElementById('transcriptText');
-    
-    // Metadata Elements
     const videoThumb = document.getElementById('videoThumb');
     const videoTitle = document.getElementById('videoTitle');
     const videoAuthor = document.getElementById('videoAuthor');
     const sentimentBadge = document.getElementById('sentimentBadge');
+
+    const originalContent = new Map();
 
     summarizeBtn.addEventListener('click', performSummarization);
     urlInput.addEventListener('keypress', (e) => {
@@ -31,89 +27,116 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = urlInput.value.trim();
         if (!url) return;
 
-        // Reset UI
-        progressBar.style.width = '0%';
-        progressBar.classList.remove('hidden');
-        document.getElementById('neuralStatus').classList.remove('hidden');
+        // UI Initialization
+        resultsGrid.classList.add('hidden');
+        progressContainer.style.display = 'block';
         summarizeBtn.disabled = true;
-        
-        // Progress Simulation for Professional feel
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 8;
-            if (progress > 96) clearInterval(interval);
-            progressBar.style.width = `${progress}%`;
-        }, 200);
+        summarizeBtn.innerText = 'PROCESSING...';
+        updateProgress(0, 'Connecting to Neural Core...');
 
         try {
-            const response = await fetch('/api/v1/summarize', {
+            const response = await fetch('/api/v1/summarize-stream', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ url: url })
             });
 
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.detail);
+            if (!response.ok) throw new Error("Connection lost.");
 
-            clearInterval(interval);
-            progressBar.style.width = '100%';
-            
-            setTimeout(() => {
-                displayResults(data);
-                progressBar.classList.add('hidden');
-                document.getElementById('neuralStatus').classList.add('hidden');
-            }, 600);
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n\n');
+                buffer = lines.pop(); // Keep partial line in buffer
+
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const data = JSON.parse(line.replace('data: ', ''));
+                        
+                        if (data.error) {
+                            throw new Error(data.error);
+                        }
+
+                        // Update Real-Time Progress
+                        updateProgress(data.progress, data.status);
+
+                        // If final result arrived
+                        if (data.result) {
+                            displayResults(data.result);
+                        }
+                    }
+                }
+            }
 
         } catch (err) {
-            clearInterval(interval);
-            progressBar.classList.add('hidden');
-            document.getElementById('neuralStatus').classList.add('hidden');
-            document.getElementById('errorMsg').innerText = `Error: ${err.message}`;
+            console.error(err);
+            updateProgress(100, `Error: ${err.message}`);
+            progressStatus.classList.add('text-danger');
         } finally {
             summarizeBtn.disabled = false;
+            summarizeBtn.innerText = 'GENERATE';
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 3000);
         }
     }
 
+    function updateProgress(percent, status) {
+        progressFill.style.width = `${percent}%`;
+        progressStatus.innerText = status;
+    }
+
     function displayResults(data) {
-        // Metadata populate
+        resultsGrid.classList.remove('hidden');
+        
+        // Metadata
         videoThumb.src = data.metadata.thumbnail;
         videoTitle.innerText = data.metadata.title;
         videoAuthor.innerText = data.metadata.author;
         
-        sentimentBadge.innerText = data.sentiment;
-        sentimentBadge.className = `badge-tier sentiment-${data.sentiment}`;
+        // Sentiment
+        sentimentBadge.innerText = `Sentiment: ${data.sentiment}`;
+        sentimentBadge.style.background = getSentimentBg(data.sentiment);
+        sentimentBadge.style.color = getSentimentColor(data.sentiment);
 
-        // Text populate
+        // Content
+        simpleSummary.innerText = data.simple_summary;
         summaryText.innerText = data.summary;
-        simpleSummaryText.innerText = data.simple_summary;
+        transcriptText.innerText = data.transcript;
 
-        // Key points build
+        // Key Points
         pointsList.innerHTML = '';
         data.key_points.forEach(point => {
             const div = document.createElement('div');
             div.className = 'point-item';
             div.innerHTML = `
-                <i class="fa-solid fa-check-double point-icon"></i>
-                <p>${point}</p>
+                <i class="fa-solid fa-circle-check"></i>
+                <p style="font-size: 0.95rem; font-weight: 600;">${point}</p>
             `;
             pointsList.appendChild(div);
         });
 
-        transcriptText.innerText = data.transcript;
-        
-        // Smooth scroll to top of content
-        window.scrollTo({ top: 300, behavior: 'smooth' });
+        // Smooth scroll to results
+        resultsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // Toggle logic for transcript
-    const toggle = document.getElementById('toggleTranscript');
-    const body = document.getElementById('transcriptBody');
-    const arrow = toggle.querySelector('.arrow');
-    
-    toggle.addEventListener('click', () => {
-        body.classList.toggle('hidden');
-        arrow.classList.toggle('rotate-90');
-    });
+    function getSentimentBg(s) {
+        if (s === 'Positive') return '#e6fffb';
+        if (s === 'Negative') return '#fff1f0';
+        return '#f5f5f5';
+    }
+
+    function getSentimentColor(s) {
+        if (s === 'Positive') return '#05cd99';
+        if (s === 'Negative') return '#ee5d50';
+        return '#a3aed0';
+    }
 
     // Translation Logic
     document.addEventListener('click', async (e) => {
@@ -121,7 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = e.target;
             const targetId = btn.getAttribute('data-target');
             const targetEl = document.getElementById(targetId);
-            const originalText = targetEl.innerText;
+            
+            if (!originalContent.has(targetId)) {
+                originalContent.set(targetId, targetEl.innerText);
+            }
             
             btn.disabled = true;
             btn.innerText = 'Translating...';
@@ -130,13 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch('/api/v1/translate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: originalText, target_lang: 'ur' })
+                    body: JSON.stringify({ text: targetEl.innerText, target_lang: 'ur' })
                 });
                 
                 const data = await response.json();
                 if (response.ok) {
-                    targetEl.style.direction = 'rtl';
-                    targetEl.style.textAlign = 'right';
                     targetEl.classList.add('urdu-text');
                     targetEl.innerText = data.translated_text;
                     btn.innerText = 'Reset to English';
@@ -144,15 +168,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.classList.remove('btn-translate');
                 }
             } catch (err) {
-                console.error(err);
                 btn.innerText = 'Error!';
             } finally {
                 btn.disabled = false;
             }
         } else if (e.target.classList.contains('btn-reset')) {
-            // Potentially we store original text, but for now just re-run or refresh
-            // For a better experience, we should store it.
-            location.reload(); // Simple way for now
+            const btn = e.target;
+            const targetId = btn.getAttribute('data-target');
+            const targetEl = document.getElementById(targetId);
+            
+            if (originalContent.has(targetId)) {
+                targetEl.innerText = originalContent.get(targetId);
+                targetEl.classList.remove('urdu-text');
+                btn.innerText = 'Translate to Urdu';
+                btn.classList.remove('btn-reset');
+                btn.classList.add('btn-translate');
+            }
         }
     });
 });
