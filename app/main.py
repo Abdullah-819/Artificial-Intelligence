@@ -27,7 +27,6 @@ app.add_exception_handler(InvalidYouTubeURLError, invalid_url_exception_handler)
 
 # Register routes
 app.include_router(api_router, prefix="/api/v1")
-app.include_router(api_router)
 
 @app.get("/")
 async def read_root():

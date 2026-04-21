@@ -128,25 +128,32 @@ class SummarizerService:
     def generate_pdf_bytes(self, title: str, content: str) -> bytes:
         """
         Generates a PDF document from the transcription content.
-        Returns the PDF as bytes.
+        Returns the PDF as bytes. Compatible with fpdf2 v2.x API.
         """
         from fpdf import FPDF
         
         pdf = FPDF()
+        pdf.set_auto_page_break(auto=True, margin=15)
         pdf.add_page()
         
         # Title
         pdf.set_font("Arial", 'B', 16)
-        pdf.cell(0, 10, f"Transcription: {title[:50]}", ln=True, align='C')
-        pdf.ln(10)
+        safe_title = title[:60].encode('latin-1', 'replace').decode('latin-1')
+        pdf.cell(0, 12, f"Transcription: {safe_title}", ln=1, align='C')
+        pdf.ln(5)
         
-        # Content
-        pdf.set_font("Arial", size=12)
-        # multi_cell handles text wrapping automatically
-        pdf.multi_cell(0, 10, content)
+        # Separator
+        pdf.set_draw_color(200, 200, 200)
+        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+        pdf.ln(8)
         
-        # Output to bytes
-        return pdf.output()
+        # Content — encode to latin-1 to avoid encoding crashes
+        pdf.set_font("Arial", size=11)
+        safe_content = content.encode('latin-1', 'replace').decode('latin-1')
+        pdf.multi_cell(0, 7, safe_content)
+        
+        # Return bytes
+        return bytes(pdf.output())
 
 # Using a global singleton pattern to avoid reloading model across requests
 nlp_service = SummarizerService()

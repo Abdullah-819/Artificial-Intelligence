@@ -58,52 +58,64 @@ async def summarize_video(request: SummarizeRequest):
 @router.post("/summarize-stream")
 async def summarize_video_stream(request: SummarizeRequest):
     """
-    Streaming endpoint to provide real-time progression for the summarization process.
+    Streaming endpoint that sends real-time progress updates via SSE.
+    Blocking sync operations run in a thread pool so the stream stays live.
     """
     async def progress_generator():
         try:
             # Phase 1: Initialize
             yield f"data: {json.dumps({'progress': 10, 'status': 'Initializing Neural Engine...'})}\n\n"
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.3)
 
             # Phase 2: URL Parsing & Metadata
-            yield f"data: {json.dumps({'progress': 25, 'status': 'Extracting Video Intelligence...'})}\n\n"
+            yield f"data: {json.dumps({'progress': 20, 'status': 'Extracting Video Intelligence...'})}\n\n"
             video_id = youtube_service.extract_video_id(request.url)
             metadata = await youtube_service.get_video_info(request.url)
             
-            # Phase 3: Transcript Extraction
-            yield f"data: {json.dumps({'progress': 45, 'status': 'Fetching Signal Transcript...'})}\n\n"
-            transcript = youtube_service.get_transcript(video_id)
+            # Phase 3: Transcript Extraction (blocking I/O — run in thread)
+            yield f"data: {json.dumps({'progress': 40, 'status': 'Fetching Signal Transcript...'})}\n\n"
+            transcript = await asyncio.to_thread(youtube_service.get_transcript, video_id)
             
-            # Phase 4: AI Processing
-            yield f"data: {json.dumps({'progress': 70, 'status': 'Generating AI Summary...'})}\n\n"
-            summary = nlp_service.summarize(transcript)
+            # Phase 4: AI Summary (CPU-intensive — run in thread)
+            yield f"data: {json.dumps({'progress': 65, 'status': 'Generating AI Summary...'})}\n\n"
+            summary = await asyncio.to_thread(nlp_service.summarize, transcript)
             
-            # Phase 5: NLP Analysis
+            # Phase 5: NLP Analysis (run in thread)
             yield f"data: {json.dumps({'progress': 85, 'status': 'Analyzing Contextual Patterns...'})}\n\n"
-            simple_summary = nlp_service.simplify(summary)
+            simple_summary = await asyncio.to_thread(nlp_service.simplify, summary)
             key_points = nlp_service.extract_key_points(summary)
             sentiment = nlp_service.analyze_sentiment(transcript)
             
-            # Final Result
+            # Final Result with all data
             final_data = {
                 'progress': 100,
-                'status': 'Analysis Complete',
+                'status': 'Analysis Complete ✓',
                 'result': {
                     'transcript': transcript,
                     'summary': summary,
                     'simple_summary': simple_summary,
                     'key_points': key_points,
-                    'metadata': metadata,
+                    'metadata': {
+                        'title': metadata.get('title', 'YouTube Video'),
+                        'thumbnail': metadata.get('thumbnail', ''),
+                        'author': metadata.get('author', 'Unknown')
+                    },
                     'sentiment': sentiment
                 }
             }
             yield f"data: {json.dumps(final_data)}\n\n"
             
         except Exception as e:
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+            yield f"data: {json.dumps({'progress': 100, 'status': 'Error', 'error': str(e)})}\n\n"
 
-    return StreamingResponse(progress_generator(), media_type="text/event-stream")
+    return StreamingResponse(
+        progress_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no"
+        }
+    )
 
 @router.post("/translate", response_model=TranslationResponse)
 async def translate_text(request: TranslationRequest):
