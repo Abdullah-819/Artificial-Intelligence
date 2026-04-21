@@ -24,5 +24,9 @@ class TranslationRequest(BaseModel):
 class TranslationResponse(BaseModel):
     translated_text: str
 
+class PDFRequest(BaseModel):
+    title: str
+    content: str
+
 class ErrorResponse(BaseModel):
     detail: str

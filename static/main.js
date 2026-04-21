@@ -151,6 +151,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Translation Logic
     const originalContent = new Map();
+    
+    // PDF Download Logic
+    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+    if (downloadPdfBtn) {
+        downloadPdfBtn.addEventListener('click', async () => {
+            const transcript = transcriptText.innerText;
+            const title = videoTitle.innerText || "Transcription";
+            
+            if (!transcript || transcript.includes("Awaiting") || transcript.includes("Initiating")) {
+                alert("Please generate a transcription first.");
+                return;
+            }
+
+            downloadPdfBtn.disabled = true;
+            downloadPdfBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing...';
+
+            try {
+                const response = await fetch('/api/v1/download-pdf', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: title, content: transcript })
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_transcription.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                } else {
+                    throw new Error("Failed to generate PDF");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Could not download PDF. Please try again.");
+            } finally {
+                downloadPdfBtn.disabled = false;
+                downloadPdfBtn.innerHTML = 'Download PDF <i class="fa-solid fa-file-pdf"></i>';
+            }
+        });
+    }
+
     document.addEventListener('click', async (e) => {
         if (e.target.classList.contains('btn-translate')) {
             const btn = e.target;

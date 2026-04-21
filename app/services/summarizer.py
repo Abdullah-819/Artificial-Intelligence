@@ -125,5 +125,28 @@ class SummarizerService:
         # Return first 3-5 key points
         return key_points[:5]
 
+    def generate_pdf_bytes(self, title: str, content: str) -> bytes:
+        """
+        Generates a PDF document from the transcription content.
+        Returns the PDF as bytes.
+        """
+        from fpdf import FPDF
+        
+        pdf = FPDF()
+        pdf.add_page()
+        
+        # Title
+        pdf.set_font("Arial", 'B', 16)
+        pdf.cell(0, 10, f"Transcription: {title[:50]}", ln=True, align='C')
+        pdf.ln(10)
+        
+        # Content
+        pdf.set_font("Arial", size=12)
+        # multi_cell handles text wrapping automatically
+        pdf.multi_cell(0, 10, content)
+        
+        # Output to bytes
+        return pdf.output()
+
 # Using a global singleton pattern to avoid reloading model across requests
 nlp_service = SummarizerService()

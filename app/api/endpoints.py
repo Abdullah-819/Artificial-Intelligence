@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Response
 from fastapi.responses import StreamingResponse
 from app.models.schemas import (
     SummarizeRequest, 
     SummarizeResponse, 
     TranslationRequest, 
-    TranslationResponse
+    TranslationResponse,
+    PDFRequest
 )
 from app.services.youtube import youtube_service
 from app.services.summarizer import nlp_service
@@ -13,6 +14,23 @@ import json
 import asyncio
 
 router = APIRouter()
+
+@router.post("/download-pdf")
+async def download_pdf(request: PDFRequest):
+    """
+    Endpoint to generate and download a PDF version of the transcription.
+    """
+    try:
+        pdf_bytes = nlp_service.generate_pdf_bytes(request.title, request.content)
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": f"attachment; filename=transcription.pdf"
+            }
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"PDF Generation failed: {str(e)}")
 
 @router.post("/summarize", response_model=SummarizeResponse)
 async def summarize_video(request: SummarizeRequest):
