@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("Quantum AI Dashboard Loaded - Neural Core Active");
     // Initialize Charts
     initCharts();
 
