@@ -9,3 +9,4 @@ sentencepiece
 pytest
 httpx
 python-multipart
+deep-translator

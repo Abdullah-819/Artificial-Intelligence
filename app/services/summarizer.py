@@ -99,13 +99,20 @@ class SummarizerService:
             return "No text provided for translation."
             
         try:
+            # Google Translate limit is usually 5000 chars
+            if len(text) > 4500:
+                text = text[:4500] + "..."
+                
             translated = GoogleTranslator(source='auto', target=target_lang).translate(text)
             if translated:
                 return str(translated)
             return "Translation service returned an empty result. Please try again."
         except Exception as e:
-            print(f"CRITICAL Translation Error: {str(e)}")
-            return "The translation service is currently busy. Please wait a moment and try again."
+            error_str = str(e)
+            print(f"CRITICAL Translation Error: {error_str}")
+            if "quota" in error_str.lower():
+                return "Translation quota exceeded. Please try again in a few minutes."
+            return f"Translation failed: {error_str}"
 
     def extract_key_points(self, summary: str) -> List[str]:
         """
