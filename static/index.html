@@ -3,208 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Quantum AI - Enterprise YouTube intelligence. Real-time neural summarization and patterns.">
-    <title>Quantum AI Dashboard | Enterprise Video Intelligence</title>
-    <link rel="stylesheet" href="/static/style.css?v=2.1">
+    <title>Quantum AI | Supersonic YouTube Summarizer</title>
+    <link rel="stylesheet" href="/static/style.css?v=3.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body style="background-color: #f4f7fe;">
+<body>
+    <!-- Liquid Background -->
+    <div class="liquid-bg">
+        <div class="blob" style="top: -10%; left: -10%;"></div>
+        <div class="blob" style="bottom: -10%; right: -10%; background: #8b5cf6;"></div>
+    </div>
+
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
-        <div class="logo-container" style="border: none;">
-            <div class="logo-icon" style="background: rgba(255,255,255,0.2);">
-                <i class="fa-solid fa-bolt"></i>
-            </div>
-            <span class="logo-text" style="color: #fff; -webkit-text-fill-color: #fff;">Quantum AI</span>
+        <div class="logo-container" style="margin-bottom: 4rem;">
+            <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+            <span class="logo-text">Quantum AI</span>
         </div>
 
-        <ul class="nav-links">
-            <li class="nav-item">
-                <a href="#" class="nav-link active">
-                    <i class="fa-solid fa-house"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fa-solid fa-message"></i>
-                    <span>Messages</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fa-solid fa-file-lines"></i>
-                    <span>Report</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fa-solid fa-gear"></i>
-                    <span>Setting</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fa-solid fa-lock"></i>
-                    <span>Privacy</span>
-                </a>
-            </li>
-        </ul>
+        <nav class="nav-links">
+            <a href="#transcription-section" class="nav-link active">
+                <i class="fa-solid fa-microphone-lines"></i>
+                <span>Transcribing</span>
+            </a>
+            <a href="#captions-section" class="nav-link">
+                <i class="fa-solid fa-closed-captioning"></i>
+                <span>Captions</span>
+            </a>
+            <a href="#summary-section" class="nav-link">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Summary</span>
+            </a>
+            <a href="#recaptulation-section" class="nav-link">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Recaptulation</span>
+            </a>
+        </nav>
 
-        <div class="sidebar-footer">
-            <div class="mode-toggle">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fa-solid fa-moon"></i>
-                    <span style="font-size: 0.85rem; font-weight: 600;">Light Mode</span>
-                </div>
-                <div class="toggle-switch"></div>
+        <div class="sidebar-credits">
+            <div class="credit-item">
+                <span class="credit-name">ABDULLAH RANA</span>
+                <span class="credit-title">SENIOR MERN STACK DEVELOPER</span>
+                <span class="credit-id">FA24-BCS-389-4E</span>
             </div>
-            
-            <div style="margin: 1.5rem 0; font-size: 0.8rem; font-weight: 600; opacity: 0.8;">
-                <i class="fa-solid fa-code"></i> Stock Dev
+            <div class="credit-item">
+                <span class="credit-name">AHMAD ALI</span>
+                <span class="credit-title">SENIOR MERN STACK DEVELOPER</span>
+                <span class="credit-id">FA24-BCS-363-4E</span>
             </div>
-            <div style="margin: 1.5rem 0; font-size: 0.8rem; font-weight: 600; opacity: 0.8;">
-                <i class="fa-solid fa-dollar-sign"></i> Withdraw
-            </div>
-
-            <button class="btn-logout" onclick="window.location.reload()">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Logout
-            </button>
         </div>
     </aside>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <main class="main-content">
-        <!-- Top Stats Row -->
-        <div class="dashboard-top-row">
-            <!-- Profile Card -->
-            <div class="dashboard-card profile-card">
-                <div class="avatar-circle">YN</div>
-                <div class="profile-info">
-                    <h4>Your Name</h4>
-                    <p>WELCOME TO DASHBOARD</p>
-                </div>
-                <div class="profile-footer">
-                    <span style="font-weight: 800; font-size: 0.7rem; color: #a3aed0;">500 POINT</span>
-                    <span style="font-weight: 800; font-size: 0.7rem; color: #a3aed0;">TUESDAY, 15 APRIL 2026</span>
-                </div>
-            </div>
+        <header class="top-header">
+            <h1>Supersonic YouTube Video Summarizer by Abdullah & Ahmad</h1>
+        </header>
 
-            <!-- Data Company Card -->
-            <div class="dashboard-card data-company-card">
-                <div class="card-header">
-                    <div style="text-align: left;">
-                        <h4>System Analytics</h4>
-                        <p style="font-size: 0.7rem; color: var(--text-muted);">Real-time neural network health and signal processing</p>
+        <div class="wireframe-grid">
+            <!-- URL Paste Row -->
+            <div id="transcription-section" class="glass-card full-row">
+                <div class="url-section">
+                    <div class="url-input-wrapper">
+                        <input type="text" id="urlInput" placeholder="PASTE URL HERE">
                     </div>
-                    <button id="refreshBtn" class="btn-action" style="background: var(--accent); color: #fff; border-radius: 8px;">Refresh System <i class="fa-solid fa-rotate"></i></button>
-                </div>
-                <div class="stats-boxes">
-                    <div class="stat-box box-orange">
-                        <span>Total Project</span>
-                        <h3>30</h3>
-                    </div>
-                    <div class="stat-box box-indigo">
-                        <span>Total Tasks</span>
-                        <h3>210</h3>
-                    </div>
-                    <div class="stat-box box-blue">
-                        <span>Members</span>
-                        <h3>86</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- URL Paste Section -->
-        <section class="input-section">
-            <div style="text-align: left; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <h2 style="font-size: 1.5rem; font-weight: 800;">URL Paste Area</h2>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">Input YouTube signal for deep neural decomposition</p>
-                </div>
-                <div id="videoMetaMini" class="hidden" style="display: flex; align-items: center; gap: 1rem; background: var(--bg-main); padding: 0.5rem 1rem; border-radius: 12px;">
-                    <img id="miniThumb" src="" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover;">
-                    <span id="miniTitle" style="font-size: 0.8rem; font-weight: 700; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
-                </div>
-            </div>
-            
-            <div class="url-input-group">
-                <div class="url-input-wrapper">
-                    <input type="text" id="urlInput" placeholder="Enter signal URL (YouTube link)...">
-                    <button id="summarizeBtn" class="btn-generate">GENERATE</button>
+                    <button id="summarizeBtn" class="btn-generate">GENERATE TRANSCRIPTION</button>
                 </div>
                 
-                <!-- Real-Time Progress -->
-                <div id="progressContainer" class="progress-container">
+                <!-- Progress Indicator -->
+                <div id="progressContainer" class="progress-container hidden">
                     <div class="progress-track">
                         <div id="progressFill" class="progress-fill"></div>
                     </div>
-                    <p id="progressStatus" class="progress-status">AWAITING SIGNAL...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Dynamic Components Grid -->
-        <div id="resultsGrid" class="dashboard-grid">
-            <!-- Left Side: Transcription & Summary -->
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <!-- Summary Component -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h4>Neural Summary</h4>
-                        <button class="btn-action btn-translate" data-target="summaryText">Translate Urdu</button>
-                    </div>
-                    <p id="simpleSummary" style="font-size: 1.25rem; font-weight: 800; color: var(--accent); margin-bottom: 1.5rem;"></p>
-                    <p id="summaryText" class="summary-text">Signal summary will appear here after decomposition.</p>
-                </div>
-
-                <!-- Transcription Component -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h4>Transcription</h4>
-                        <span style="font-size: 0.7rem; font-weight: 700; color: var(--success);">REAL-TIME STREAM</span>
-                    </div>
-                    <div id="transcriptText" class="summary-text" style="max-height: 400px; overflow-y: auto; background: var(--bg-main); padding: 1.5rem; border-radius: 15px;">
-                        Awaiting neural signal to begin transcribing...
-                    </div>
+                    <p id="progressStatus" style="margin-top: 10px; font-size: 0.75rem; font-weight: 800; color: var(--accent);"></p>
                 </div>
             </div>
 
-            <!-- Right Side: Captions & Recaptulation -->
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <!-- Video Status Component -->
-                <div class="dashboard-card" style="text-align: center;">
-                    <img id="videoThumb" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=2564" class="video-preview" alt="">
-                    <h3 id="videoTitle" style="font-size: 1rem; margin-bottom: 0.5rem;">Neural Ready</h3>
-                    <p id="videoAuthor" style="color: var(--text-muted); font-size: 0.75rem;">Waiting for signal...</p>
+            <!-- Thumbnail Card -->
+            <div class="glass-card">
+                <div class="thumbnail-box">
+                    <img id="videoThumb" src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&q=80&w=1000" alt="Thumbnail">
                 </div>
-
-                <!-- Recaptulation Component -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h4>Recaptulation</h4>
-                        <i class="fa-solid fa-list-check" style="color: var(--warning);"></i>
-                    </div>
-                    <div id="pointsList" class="points-list">
-                        <p style="font-size: 0.8rem; color: var(--text-muted);">Points of interest will be extracted here.</p>
-                    </div>
+                <div style="margin-top: 1.5rem;">
+                    <h2 id="videoTitle" style="font-size: 1.1rem; margin-bottom: 5px;">Awaiting Signal...</h2>
+                    <p id="videoAuthor" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;"></p>
                 </div>
+            </div>
 
-                <!-- Captions Component -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h4>Captions Info</h4>
-                        <i class="fa-solid fa-closed-captioning" style="color: var(--accent);"></i>
-                    </div>
-                    <p id="captionsInfo" style="font-size: 0.85rem; color: var(--text-main); font-weight: 600;">
-                        Caption metadata will be displayed here.
-                    </p>
+            <!-- Recaptulation Card (Bullet Points) -->
+            <div id="recaptulation-section" class="glass-card">
+                <h4 style="margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">Bulletpoints of the Videos</h4>
+                <div id="pointsList" class="points-box">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Signals will appear here...</p>
+                </div>
+            </div>
+
+            <!-- Summary Card -->
+            <div id="summary-section" class="glass-card full-row">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h4 style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">Neural Summary</h4>
+                    <button class="btn-action btn-translate" data-target="summaryText" style="background: var(--glass-bg); border: 1px solid var(--glass-border); color: #fff; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">Urdu View</button>
+                </div>
+                <p id="simpleSummary" style="font-size: 1.25rem; font-weight: 800; color: var(--accent); margin-bottom: 1rem;"></p>
+                <p id="summaryText" style="line-height: 1.8; color: var(--text-main);"></p>
+            </div>
+
+            <!-- Captions Card -->
+            <div id="captions-section" class="glass-card full-row">
+                <h4 style="margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">Captions will be showed here</h4>
+                <div id="transcriptText" class="captions-area">
+                    Neural stream awaiting signal decomposition...
                 </div>
             </div>
         </div>

@@ -1,33 +1,39 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Quantum AI Dashboard Loaded - Neural Core Active");
+    console.log("Supersonic AI Dashboard Loaded - Liquid Glass Theme Active");
 
     const summarizeBtn = document.getElementById('summarizeBtn');
-    const refreshBtn = document.getElementById('refreshBtn');
     const urlInput = document.getElementById('urlInput');
     const progressContainer = document.getElementById('progressContainer');
     const progressFill = document.getElementById('progressFill');
     const progressStatus = document.getElementById('progressStatus');
     
-    // Components
+    // Wireframe Components
     const summaryText = document.getElementById('summaryText');
     const simpleSummary = document.getElementById('simpleSummary');
     const pointsList = document.getElementById('pointsList');
     const transcriptText = document.getElementById('transcriptText');
-    const captionsInfo = document.getElementById('captionsInfo');
-    
-    // Metadata Components
     const videoThumb = document.getElementById('videoThumb');
     const videoTitle = document.getElementById('videoTitle');
     const videoAuthor = document.getElementById('videoAuthor');
-    const videoMetaMini = document.getElementById('videoMetaMini');
-    const miniThumb = document.getElementById('miniThumb');
-    const miniTitle = document.getElementById('miniTitle');
 
-    const originalContent = new Map();
+    // Smooth Scrolling for Sidebar Routes
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetEl = document.querySelector(targetId);
+            
+            // Update Active State
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+
+            if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
 
     summarizeBtn.addEventListener('click', performSummarization);
-    refreshBtn.addEventListener('click', () => window.location.reload());
-    
     urlInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') performSummarization();
     });
@@ -36,15 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = urlInput.value.trim();
         if (!url) return;
 
-        // Reset UI for new analysis
-        progressContainer.style.display = 'block';
+        // Reset UI
+        progressContainer.classList.remove('hidden');
         summarizeBtn.disabled = true;
         summarizeBtn.innerText = 'PROCESSING...';
-        updateProgress(0, 'Initializing Neural Signal...');
+        updateProgress(5, 'Connecting to Neural Hub...');
         
-        transcriptText.innerText = "Connecting to video stream...";
-        summaryText.innerText = "Processing summary...";
-        pointsList.innerHTML = '<p style="font-size: 0.8rem; color: var(--text-muted);">Extracting points...</p>';
+        transcriptText.innerText = "Initiating signal decomposition...";
+        summaryText.innerText = "";
+        pointsList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Filtering signals...</p>';
 
         try {
             const response = await fetch('/api/v1/summarize-stream', {
@@ -71,28 +77,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (data.error) throw new Error(data.error);
                         
                         updateProgress(data.progress, data.status);
-
-                        // If it's a progress update, check if we have metadata yet
-                        // (In a real implementation, metadata might arrive mid-stream)
-                        // For now, we wait for the final result or update if the backend sends it early
                         
                         if (data.result) {
                             displayResults(data.result);
-                        } else if (data.progress > 25 && data.status.includes("Extracting")) {
-                            // If we were using a more granular stream, we'd update metadata here
                         }
                     }
                 }
             }
 
         } catch (err) {
-            updateProgress(100, `Signal Error: ${err.message}`);
-            progressStatus.style.color = '#ee5d50';
+            updateProgress(100, `Signal Failed: ${err.message}`);
+            progressStatus.style.color = '#f87171';
             transcriptText.innerText = `Error: ${err.message}`;
         } finally {
             summarizeBtn.disabled = false;
-            summarizeBtn.innerText = 'GENERATE';
-            setTimeout(() => { progressContainer.style.display = 'none'; }, 5000);
+            summarizeBtn.innerText = 'GENERATE TRANSCRIPTION';
+            setTimeout(() => { progressContainer.classList.add('hidden'); }, 8000);
         }
     }
 
@@ -102,35 +102,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayResults(data) {
-        // Metadata & Mini Thumb
+        // Metadata
         videoThumb.src = data.metadata.thumbnail;
         videoTitle.innerText = data.metadata.title;
         videoAuthor.innerText = data.metadata.author;
-        
-        videoMetaMini.classList.remove('hidden');
-        miniThumb.src = data.metadata.thumbnail;
-        miniTitle.innerText = data.metadata.title;
 
         // Content
         simpleSummary.innerText = data.simple_summary;
         summaryText.innerText = data.summary;
         transcriptText.innerText = data.transcript;
-        captionsInfo.innerText = `Transcribed ${data.transcript.split(' ').length} words successfully. Signal quality 100%.`;
 
-        // Recaptulation (Key Points)
+        // Bullet Points
         pointsList.innerHTML = '';
         data.key_points.forEach(point => {
             const div = document.createElement('div');
-            div.className = 'point-item';
-            div.innerHTML = `<i class="fa-solid fa-check-double"></i> <span>${point}</span>`;
+            div.style.display = 'flex';
+            div.style.gap = '10px';
+            div.style.padding = '10px';
+            div.style.background = 'rgba(255,255,255,0.03)';
+            div.style.borderRadius = '10px';
+            div.innerHTML = `<i class="fa-solid fa-square-rss" style="color: var(--accent); margin-top: 4px;"></i> <p style="font-size: 0.85rem; font-weight: 600;">${point}</p>`;
             pointsList.appendChild(div);
         });
 
-        // Smooth scroll
-        document.getElementById('resultsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Final Scroll to Thumbnail to show results
+        videoThumb.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // Translation Logic
+    // Translation Logic (Reset capability)
+    const originalContent = new Map();
     document.addEventListener('click', async (e) => {
         if (e.target.classList.contains('btn-translate')) {
             const btn = e.target;
