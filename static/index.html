@@ -10,15 +10,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
-        <div class="logo-container">
-            <div class="logo-icon">
+        <div class="logo-container" style="border: none;">
+            <div class="logo-icon" style="background: rgba(255,255,255,0.2);">
                 <i class="fa-solid fa-bolt"></i>
             </div>
-            <span class="logo-text">Quantum AI</span>
+            <span class="logo-text" style="color: #fff; -webkit-text-fill-color: #fff;">Quantum AI</span>
         </div>
 
         <ul class="nav-links">
@@ -30,93 +31,137 @@
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
-                    <span>History</span>
+                    <i class="fa-solid fa-message"></i>
+                    <span>Messages</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <span>Analytics</span>
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>Report</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="fa-solid fa-gear"></i>
-                    <span>Settings</span>
+                    <span>Setting</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Privacy</span>
                 </a>
             </li>
         </ul>
 
         <div class="sidebar-footer">
-            <div style="padding: 1rem; background: var(--bg-main); border-radius: 15px; text-align: center;">
-                <p style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem;">DEVELOPED BY</p>
-                <p style="font-size: 0.9rem; font-weight: 800;">Abdullah Rana</p>
-                <p style="font-size: 0.9rem; font-weight: 800;">Ahmad Ali</p>
+            <div class="mode-toggle">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-moon"></i>
+                    <span style="font-size: 0.85rem; font-weight: 600;">Light Mode</span>
+                </div>
+                <div class="toggle-switch"></div>
             </div>
+            
+            <div style="margin: 1.5rem 0; font-size: 0.8rem; font-weight: 600; opacity: 0.8;">
+                <i class="fa-solid fa-code"></i> Stock Dev
+            </div>
+            <div style="margin: 1.5rem 0; font-size: 0.8rem; font-weight: 600; opacity: 0.8;">
+                <i class="fa-solid fa-dollar-sign"></i> Withdraw
+            </div>
+
+            <button class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </button>
         </div>
     </aside>
 
     <!-- Main Content Area -->
     <main class="main-content">
-        <!-- Top Bar -->
-        <header class="top-bar">
-            <div>
-                <p style="color: var(--text-muted); font-weight: 600; font-size: 0.85rem;">Main Dashboard</p>
-                <h1 class="page-title">Video Intelligence</h1>
+        <!-- Top Stats Row -->
+        <div class="dashboard-top-row">
+            <!-- Profile Card -->
+            <div class="dashboard-card profile-card">
+                <div class="avatar-circle">YN</div>
+                <div class="profile-info">
+                    <h4>Your Name</h4>
+                    <p>WELCOME TO DASHBOARD</p>
+                </div>
+                <div class="profile-footer">
+                    <span style="font-weight: 800; font-size: 0.7rem; color: #a3aed0;">500 POINT</span>
+                    <span style="font-weight: 800; font-size: 0.7rem; color: #a3aed0;">TUESDAY, 15 APRIL 2026</span>
+                </div>
             </div>
 
-            <div class="search-container">
-                <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
-                <input type="text" placeholder="Search analytics history...">
-            </div>
-
-            <div style="display: flex; align-items: center; gap: 1.5rem;">
-                <div class="stat-icon" style="background: var(--bg-main); color: var(--accent); width: 45px; height: 45px;">
-                    <i class="fa-solid fa-bell"></i>
+            <!-- Data Company Card -->
+            <div class="dashboard-card data-company-card">
+                <div class="card-header">
+                    <div style="text-align: left;">
+                        <h4>Data Company</h4>
+                        <p style="font-size: 0.7rem; color: var(--text-muted);">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                    </div>
+                    <button class="btn-action" style="background: var(--success); color: #fff; border-radius: 8px;">Download Report <i class="fa-solid fa-download"></i></button>
                 </div>
-                <div style="width: 45px; height: 45px; border-radius: 50%; background: var(--primary-gradient);"></div>
-            </div>
-        </header>
-
-        <!-- Stats Row -->
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon" style="background: #e7e9fb; color: #4318ff;"><i class="fa-solid fa-video"></i></div>
-                <div class="stat-info">
-                    <span>Total Summaries</span>
-                    <h3>1,248</h3>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background: #e6f7ff; color: #00b5ff;"><i class="fa-solid fa-bolt"></i></div>
-                <div class="stat-info">
-                    <span>Processing Power</span>
-                    <h3>99.9%</h3>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background: #e6fffb; color: #05cd99;"><i class="fa-solid fa-microchip"></i></div>
-                <div class="stat-info">
-                    <span>Active Neurons</span>
-                    <h3>512K</h3>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background: #fff7e6; color: #ffb547;"><i class="fa-solid fa-shield-halved"></i></div>
-                <div class="stat-info">
-                    <span>Data Security</span>
-                    <h3>Enterprise</h3>
+                <div class="stats-boxes">
+                    <div class="stat-box box-orange">
+                        <span>Total Project</span>
+                        <h3>30</h3>
+                    </div>
+                    <div class="stat-box box-indigo">
+                        <span>Total Tasks</span>
+                        <h3>210</h3>
+                    </div>
+                    <div class="stat-box box-blue">
+                        <span>Members</span>
+                        <h3>86</h3>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Input Section -->
+        <!-- Charts Row -->
+        <div class="dashboard-grid" style="margin-bottom: 2.5rem;">
+            <!-- Data Graphic (Line Chart) -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div>
+                        <h4>Data Graphic</h4>
+                        <p style="font-size: 0.7rem; color: var(--text-muted);">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+                    </div>
+                    <div class="search-mini">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search here">
+                    </div>
+                </div>
+                <div style="height: 250px;">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Project Company (Pie Chart) -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h4>Project Company</h4>
+                    <i class="fa-solid fa-gear" style="color: var(--text-muted);"></i>
+                </div>
+                <div style="height: 200px; display: flex; justify-content: center;">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Neural Analysis Section (Input) -->
         <section class="input-section">
-            <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 1.5rem;">Analyze YouTube Intelligence</h2>
+            <div style="text-align: left; margin-bottom: 2rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 800;">Neural Signal Analysis</h2>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Paste YouTube link for real-time AI decomposition</p>
+            </div>
+            
             <div class="url-input-group">
                 <div class="url-input-wrapper">
-                    <input type="text" id="urlInput" placeholder="Paste YouTube Video URL here for real-time extraction...">
+                    <input type="text" id="urlInput" placeholder="Enter video signal URL...">
                     <button id="summarizeBtn" class="btn-generate">GENERATE</button>
                 </div>
                 
@@ -125,48 +170,33 @@
                     <div class="progress-track">
                         <div id="progressFill" class="progress-fill"></div>
                     </div>
-                    <p id="progressStatus" class="progress-status">Initializing Signal Processing...</p>
+                    <p id="progressStatus" class="progress-status">AWAITING SIGNAL...</p>
                 </div>
             </div>
         </section>
 
-        <!-- Dashboard Grid (Results) -->
+        <!-- Results Display -->
         <div id="resultsGrid" class="dashboard-grid hidden">
-            <!-- Left Side: Summary -->
             <div class="dashboard-card">
                 <div class="card-header">
-                    <h4>Executive Analysis</h4>
-                    <button class="btn-action btn-translate" data-target="summaryText">Translate to Urdu</button>
+                    <h4>Analysis Summary</h4>
+                    <button class="btn-action btn-translate" data-target="summaryText">Urdu View</button>
                 </div>
-                <div id="summaryContent">
-                    <p id="simpleSummary" style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1.5rem; border-left: 5px solid var(--accent); padding-left: 1rem;"></p>
-                    <p id="summaryText" class="summary-text"></p>
-                </div>
+                <p id="simpleSummary" style="font-size: 1.25rem; font-weight: 800; color: var(--accent); margin-bottom: 1.5rem;"></p>
+                <p id="summaryText" class="summary-text"></p>
             </div>
 
-            <!-- Right Side: Meta & Points -->
             <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <div class="dashboard-card" style="padding: 1.5rem;">
-                    <img id="videoThumb" src="" class="video-preview" alt="Video Preview">
-                    <h3 id="videoTitle" style="font-size: 1.1rem; margin-bottom: 0.5rem;"></h3>
-                    <p id="videoAuthor" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;"></p>
-                    <div id="sentimentBadge" class="stat-info" style="margin-top: 1rem; padding: 0.5rem 1rem; border-radius: 10px; display: inline-block;"></div>
-                </div>
-
                 <div class="dashboard-card">
-                    <div class="card-header">
-                        <h4>Key Takeaways</h4>
-                    </div>
-                    <div id="pointsList" class="points-list"></div>
+                    <img id="videoThumb" src="" class="video-preview" alt="">
+                    <h3 id="videoTitle" style="font-size: 1rem; margin-bottom: 0.5rem;"></h3>
+                    <p id="videoAuthor" style="color: var(--text-muted); font-size: 0.75rem;"></p>
+                    <div id="sentimentBadge" style="margin-top: 1rem; font-size: 0.8rem; font-weight: 700;"></div>
                 </div>
-            </div>
-
-            <!-- Transcript Full-Width -->
-            <div class="dashboard-card" style="grid-column: 1 / -1;">
-                <div class="card-header">
-                    <h4>Neural Signal Transcript</h4>
+                <div class="dashboard-card">
+                    <h4>Pattern Findings</h4>
+                    <div id="pointsList" class="points-list" style="margin-top: 1.5rem;"></div>
                 </div>
-                <div id="transcriptText" class="summary-text" style="font-size: 0.9rem; opacity: 0.8; max-height: 300px; overflow-y: auto; background: var(--bg-main); padding: 1.5rem; border-radius: 20px;"></div>
             </div>
         </div>
     </main>
